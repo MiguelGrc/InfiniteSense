@@ -89,6 +89,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     float x[] = new float[6];
     float y[] = new float[6];
 
+    /**
+     * Este metodo procesa las señales de los botones tactiles. Saltar, golpear y pad (que hace la función de agacharse).
+     */
     public void procesarEventosTouch() {
         for (int i = 0; i < 6; i++) {
             if (accion[i] != NO_ACTION) {

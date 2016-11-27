@@ -79,7 +79,7 @@ public class Nivel {
     public void actualizar(long tiempo) throws Exception {
         if (inicializado) {
 
-            jugador.procesarOrdenes(botonSaltarPulsado, botonGolpearPulsado, botonAgacharPulsado);
+            jugador.procesarOrdenes(botonSaltarPulsado, botonGolpearPulsado, botonAgacharPulsado, nivelPausado);
             if (botonSaltarPulsado) {
                 botonSaltarPulsado = false;
             }
