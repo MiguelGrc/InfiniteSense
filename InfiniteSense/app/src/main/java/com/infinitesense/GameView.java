@@ -9,6 +9,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.infinitesense.modelos.Nivel;
+import com.infinitesense.modelos.controles.BotonAgachar;
 import com.infinitesense.modelos.controles.BotonGolpear;
 import com.infinitesense.modelos.controles.BotonSaltar;
 
@@ -26,6 +27,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
     public int numeroNivel = 0;
     private BotonGolpear botonGolpear;
     private BotonSaltar botonSaltar;
+    private BotonAgachar botonAgachar;
 
 
     public GameView(Context context) {
@@ -113,6 +115,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
         nivel = new Nivel(context,numeroNivel);
         botonGolpear = new BotonGolpear(context);
         botonSaltar = new BotonSaltar(context);
+        botonAgachar= new BotonAgachar(context);
         nivel.gameview = this;
     }
 
@@ -122,6 +125,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
 
     protected void dibujar(Canvas canvas) {
         nivel.dibujar(canvas);
+        //No es necesario dibujarlas ya que solo contamos áreas de pantalla, no botones.
         botonGolpear.dibujar(canvas);
         botonSaltar.dibujar(canvas);
     }

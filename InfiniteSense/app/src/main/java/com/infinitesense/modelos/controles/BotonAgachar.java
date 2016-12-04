@@ -2,29 +2,24 @@ package com.infinitesense.modelos.controles;
 
 import android.content.Context;
 
-
 import com.infinitesense.GameView;
 import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;
 import com.infinitesense.modelos.Modelo;
 
-import static com.infinitesense.modelos.Tile.altura;
-import static com.infinitesense.modelos.Tile.ancho;
-
 /**
- * Created by juanfa on 5/10/16.
+ * Created by Jorge on 03/12/2016.
  */
+public class BotonAgachar extends Modelo {
+    public BotonAgachar(Context context) {
+        super(context, GameView.pantallaAncho*0.15 , GameView.pantallaAlto*0.5,
+            70,70);
 
-public class BotonSaltar extends Modelo {
+    altura = (int) (GameView.pantallaAlto*0.60);
+    ancho = (int) (GameView.pantallaAlto*0.15);
 
-    public BotonSaltar(Context context) {
-        super(context, GameView.pantallaAncho*0.5 , GameView.pantallaAlto*0.15,
-                GameView.pantallaAlto, GameView.pantallaAncho);
-
-        altura = (int) (GameView.pantallaAlto*0.15);
-        ancho = (int) (GameView.pantallaAlto*0.75);
-        imagen = CargadorGraficos.cargarDrawable(context, R.drawable.buttonjump);
-    }
+    imagen = CargadorGraficos.cargarDrawable(context, R.drawable.buttonfire);
+}
 
     public boolean estaPulsado(float clickX, float clickY) {
         boolean estaPulsado = false;

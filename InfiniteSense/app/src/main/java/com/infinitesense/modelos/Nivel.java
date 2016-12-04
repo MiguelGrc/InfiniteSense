@@ -79,20 +79,24 @@ public class Nivel {
     public void actualizar(long tiempo) throws Exception {
         if (inicializado) {
 
-            jugador.procesarOrdenes(botonSaltarPulsado, botonGolpearPulsado, botonAgacharPulsado);
-            if (botonSaltarPulsado) {
-                botonSaltarPulsado = false;
-            }
-            if (botonAgacharPulsado){
-                botonAgacharPulsado = false;
-            }
-            if (botonGolpearPulsado) {
-                //TODO: Hay que comprobar colisiones contra que golpea
-                botonGolpearPulsado = false;
-            }
+            if(!nivelPausado) {
 
-            jugador.actualizar(tiempo);
-            aplicarReglasMovimiento();
+                jugador.procesarOrdenes(botonSaltarPulsado, botonGolpearPulsado, botonAgacharPulsado);
+                if (botonSaltarPulsado) {
+                    botonSaltarPulsado = false;
+                }
+                if (botonAgacharPulsado) {
+                    botonAgacharPulsado = false;
+                }
+                if (botonGolpearPulsado) {
+                    //TODO: Hay que comprobar colisiones contra que golpea
+                    botonGolpearPulsado = false;
+                }
+
+                jugador.actualizar(tiempo);
+                aplicarReglasMovimiento();
+                aplicarReglasDeMovimiento2();
+            }
         }
     }
 
@@ -143,6 +147,8 @@ public class Nivel {
 
                 // No tengo un tile PASABLE delante
                 // o es el FINAL del nivel o es uno SOLIDO
+
+
             } else if (tileXJugadorDerecha <= anchoMapaTiles() - 1 &&
                     tileYJugadorInferior <= altoMapaTiles() - 1 &&
                     mapaTiles[tileXJugadorDerecha][tileYJugadorInferior].tipoDeColision ==
@@ -151,6 +157,7 @@ public class Nivel {
                             Tile.PASABLE &&
                     mapaTiles[tileXJugadorDerecha][tileYJugadorSuperior].tipoDeColision ==
                             Tile.PASABLE) {
+
 
                 // Si en el propio tile del jugador queda espacio para
                 // avanzar más, avanzo
@@ -198,7 +205,7 @@ public class Nivel {
                             == Tile.PASABLE) {
 
                 // Si en el propio tile del jugador queda espacio para
-                // avanzar más, avanzo
+              /*  // avanzar más, avanzo
                 int TileJugadorBordeIzquierdo = tileXJugadorIzquierda * Tile.ancho;
                 double distanciaX = (jugador.x - jugador.ancho / 2) - TileJugadorBordeIzquierdo;
 
@@ -208,7 +215,14 @@ public class Nivel {
                 } else {
                     // Opcional, corregir posición
                     jugador.x = TileJugadorBordeIzquierdo + jugador.ancho / 2;
-                }
+                }*/
+
+                // Pierde directamente
+                scrollEjeX = 0;
+                scrollEjeY = 0;
+                jugador.restablecerPosicionInicial();
+                nivelPausado = true;
+                mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
             }
         }
         // Hacia arriba
@@ -307,6 +321,49 @@ public class Nivel {
         if (jugador.colisiona(meta)) {
             gameview.nivelCompleto();
         }*/
+    }
+
+    /**
+     * Método para hacer al jugador perder cuando colisiona con algo.
+     */
+    public void aplicarReglasDeMovimiento2(){
+        int estabilizador= (int) (jugador.x-20); //Para hacer perder al jugador al chocarse contra algo mas realista , mas pegado al bloque.
+
+        int tileXJugadorCentro=(int)(estabilizador/ Tile.ancho);
+
+        int tileYJugadorInferior
+                = (int) (jugador.y + (jugador.altura / 2 - 1)) / Tile.altura;
+        int tileYJugadorCentro
+                = (int) jugador.y / Tile.altura;
+        int tileYJugadorSuperior
+                = (int) (jugador.y - (jugador.altura / 2 - 1)) / Tile.altura;
+//        Log.v("Debug","TileXDown: "+mapaTiles[tileXJugadorCentro][tileYJugadorInferior].tipoDeColision+"tileXStraight: "+ mapaTiles[tileXJugadorCentro][tileYJugadorCentro].tipoDeColision+
+//        "TileXUp: "+mapaTiles[tileXJugadorCentro][tileYJugadorSuperior].tipoDeColision); //Para debugear.
+
+        if(tileXJugadorCentro > anchoMapaTiles()-2){ //Ha perdido por chocar contra el fin del mapa.
+            // ha perdido
+            scrollEjeX = 0;
+            scrollEjeY = 0;
+            jugador.restablecerPosicionInicial();
+            nivelPausado = true;
+            mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
+        }
+        else if(//Si choca de frente contra un tile no pasable.
+                mapaTiles[tileXJugadorCentro+1][tileYJugadorInferior].tipoDeColision
+                        == Tile.SOLIDO ||
+                mapaTiles[tileXJugadorCentro+1][tileYJugadorCentro].tipoDeColision
+                        == Tile.SOLIDO ||
+                mapaTiles[tileXJugadorCentro+1][tileYJugadorSuperior].tipoDeColision
+                        == Tile.SOLIDO){
+            // ha perdido
+            scrollEjeX = 0;
+            scrollEjeY = 0;
+            jugador.restablecerPosicionInicial();
+            nivelPausado = true;
+            mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
+
+
+        }
     }
 
 
@@ -409,7 +466,7 @@ public class Nivel {
             case 'w':
                 // bloque de musgo, no se puede pasar
                 return new Tile(CargadorGraficos.cargarDrawable(context,
-                        R.drawable.tile_water_surface), Tile.SOLIDO);
+                        R.drawable.tile_water_surface), Tile.PASABLE);
             case 'W':
                 // bloque de musgo, no se puede pasar
                 return new Tile(CargadorGraficos.cargarDrawable(context,
