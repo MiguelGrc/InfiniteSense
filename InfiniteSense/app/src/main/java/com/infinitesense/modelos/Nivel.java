@@ -78,27 +78,24 @@ public class Nivel {
      */
     public void actualizar(long tiempo) throws Exception {
         if (inicializado) {
-
-            if(!nivelPausado) {
-
-                jugador.procesarOrdenes(botonSaltarPulsado, botonGolpearPulsado, botonAgacharPulsado);
-                if (botonSaltarPulsado) {
-                    botonSaltarPulsado = false;
-                }
-                if (botonAgacharPulsado) {
-                    botonAgacharPulsado = false;
-                }
-                if (botonGolpearPulsado) {
-                    //TODO: Hay que comprobar colisiones contra que golpea
-                    botonGolpearPulsado = false;
-                }
+            jugador.procesarOrdenes(botonSaltarPulsado, botonGolpearPulsado, botonAgacharPulsado, nivelPausado);
+            if (botonSaltarPulsado) {
+                botonSaltarPulsado = false;
+            }
+            if (botonAgacharPulsado){
+                botonAgacharPulsado = false;
+            }
+            if (botonGolpearPulsado) {
+                //TODO: Hay que comprobar colisiones contra que golpea
+                botonGolpearPulsado = false;
+            }
 
                 jugador.actualizar(tiempo);
                 aplicarReglasMovimiento();
                 aplicarReglasDeMovimiento2();
             }
         }
-    }
+
 
     private void aplicarReglasMovimiento() throws Exception {
 

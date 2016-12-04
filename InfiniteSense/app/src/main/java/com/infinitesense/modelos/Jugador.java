@@ -246,30 +246,37 @@ public class Jugador extends Modelo {
      * Saltar hace que el jugador cambie su estado a saltoPendiente.
      * Agachar hace que el jugador se agache y pierda velocidad.
      * Golpear hace que el jugador cambie el estado de golpeando a true.
+     * Si el nivel esta pausado, las velocidades son 0 y el sprite es el de parado a la derecha.
      * @param saltar
      * @param golpear
      * @param agachar
      */
-    public void procesarOrdenes(boolean saltar, boolean golpear, boolean agachar) {
-        if (saltar) {
-            if (!enElAire) {
-                saltoPendiente = true;
+    public void procesarOrdenes(boolean saltar, boolean golpear, boolean agachar, boolean nivelPausado) {
+        if (!nivelPausado) {
+            if (saltar) {
+                if (!enElAire) {
+                    saltoPendiente = true;
+                }
+            }
+            if (agachar) {
+                velocidadX = 2;
+                velocidadY += 2;
+                estadoAgachado = true;
+            } else {
+                velocidadX = 5;
+                estadoAgachado = false;
+            }
+            if (golpear) {
+                estadoGolpeando = true;
+                // preparar los sprites, no son bucles hay que reiniciarlos
+                sprites.get(GOLPEANDO_DERECHA).setFrameActual(0);
+                sprites.get(GOLPEANDO_IZQUIERDA).setFrameActual(0);
             }
         }
-        if (agachar){
-            velocidadX = 2;
-            velocidadY += 2;
-            estadoAgachado = true;
-        }
         else{
-            velocidadX = 5;
-            estadoAgachado = false;
-        }
-        if (golpear) {
-            estadoGolpeando = true;
-            // preparar los sprites, no son bucles hay que reiniciarlos
-            sprites.get(GOLPEANDO_DERECHA).setFrameActual(0);
-            sprites.get(GOLPEANDO_IZQUIERDA).setFrameActual(0);
+            sprite = sprites.get(PARADO_DERECHA);
+            velocidadX = 0;
+            velocidadY = 0;
         }
 
     }

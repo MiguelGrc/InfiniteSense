@@ -12,9 +12,10 @@ import com.infinitesense.modelos.Nivel;
 import com.infinitesense.modelos.controles.BotonAgachar;
 import com.infinitesense.modelos.controles.BotonGolpear;
 import com.infinitesense.modelos.controles.BotonSaltar;
+import com.infinitesense.modelos.controles.Pad;
 
 
-public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
+public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     boolean iniciado = false;
     Context context;
@@ -28,6 +29,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
     private BotonGolpear botonGolpear;
     private BotonSaltar botonSaltar;
     private BotonAgachar botonAgachar;
+    private Pad pad;
 
 
     public GameView(Context context) {
@@ -43,7 +45,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
     }
 
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // valor a Binario
@@ -51,7 +52,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
         // Indice del puntero
         int pointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
 
-        int pointerId  = event.getPointerId(pointerIndex);
+        int pointerId = event.getPointerId(pointerIndex);
         switch (action) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -68,9 +69,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
                 break;
             case MotionEvent.ACTION_MOVE:
                 int pointerCount = event.getPointerCount();
-                for(int i =0; i < pointerCount; i++){
+                for (int i = 0; i < pointerCount; i++) {
                     pointerIndex = i;
-                    pointerId  = event.getPointerId(pointerIndex);
+                    pointerId = event.getPointerId(pointerIndex);
                     accion[pointerId] = ACTION_MOVE;
                     x[pointerId] = event.getX(pointerIndex);
                     y[pointerId] = event.getY(pointerIndex);
@@ -90,11 +91,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
     float x[] = new float[6];
     float y[] = new float[6];
 
-    public void procesarEventosTouch(){
-        for(int i=0; i < 6; i++){
-            if(accion[i] != NO_ACTION ) {
-                if(accion[i] == ACTION_DOWN){
-                    if(nivel.nivelPausado)
+    /**
+     * Este metodo procesa las señales de los botones tactiles. Saltar, golpear y pad (que hace la función de agacharse).
+     */
+    public void procesarEventosTouch() {
+        for (int i = 0; i < 6; i++) {
+            if (accion[i] != NO_ACTION) {
+                if (accion[i] == ACTION_DOWN) {
+                    if (nivel.nivelPausado)
                         nivel.nivelPausado = false;
                 }
                 if (botonGolpear.estaPulsado(x[i], y[i])) {
@@ -107,15 +111,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
                         nivel.botonSaltarPulsado = true;
                     }
                 }
+                if (pad.estaPulsado(x[i], y[i])) {
+                    nivel.botonAgacharPulsado = true;
+                }
             }
         }
     }
 
     protected void inicializar() throws Exception {
-        nivel = new Nivel(context,numeroNivel);
+        nivel = new Nivel(context, numeroNivel);
         botonGolpear = new BotonGolpear(context);
         botonSaltar = new BotonSaltar(context);
         botonAgachar= new BotonAgachar(context);
+        pad = new Pad(context);
         nivel.gameview = this;
     }
 
@@ -128,15 +136,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
         //No es necesario dibujarlas ya que solo contamos áreas de pantalla, no botones.
         botonGolpear.dibujar(canvas);
         botonSaltar.dibujar(canvas);
+        pad.dibujar(canvas);
     }
 
     /**
      * Cada vez que se acaba el nivel se llama a este método para comprobar cual es el siguiente nivel a inicializar.
+     *
      * @throws Exception
      */
     public void nivelCompleto() throws Exception {
 
-        if (numeroNivel < 2){ // Número Máximo de Nivel
+        if (numeroNivel < 2) { // Número Máximo de Nivel
             numeroNivel++;
         } else {
             numeroNivel = 0;
@@ -177,8 +187,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
             try {
                 gameloop.join();
                 intentarDeNuevo = false;
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
             }
         }
     }
@@ -195,15 +204,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback  {
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.v("Tecla","Tecla pulsada: "+keyCode);
+        Log.v("Tecla", "Tecla pulsada: " + keyCode);
 
-        if( keyCode == 51) {
+        if (keyCode == 51) {
             nivel.botonSaltarPulsado = true;
         }
-        if( keyCode == 62) {
+        if (keyCode == 62) {
             nivel.botonGolpearPulsado = true;
         }
-        if(keyCode == 47 ){
+        if (keyCode == 47) {
             nivel.botonAgacharPulsado = true;
         }
         return super.onKeyDown(keyCode, event);
