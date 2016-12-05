@@ -1,5 +1,6 @@
 package com.infinitesense.modelos;
 
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
 /**
@@ -20,6 +21,22 @@ public class Tile  {
     {
         this.imagen = imagen ;
         this.tipoDeColision = tipoDeColision;
+    }
+
+
+    public void dibujar(Canvas canvas, int x, int y) {
+        if (imagen != null) {
+            imagen.setBounds(
+                    (x * Tile.ancho) - Nivel.scrollEjeX,
+                    (y * Tile.altura) - Nivel.scrollEjeY,
+                    (x * Tile.ancho) + Tile.ancho - Nivel.scrollEjeX,
+                    y * Tile.altura + Tile.altura - Nivel.scrollEjeY);
+            imagen.draw(canvas);
+        }
+    }
+
+    public void actualizar(long tiempo){
+
     }
 
 }

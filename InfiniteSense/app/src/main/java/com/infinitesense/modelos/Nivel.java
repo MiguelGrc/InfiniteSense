@@ -11,6 +11,7 @@ import com.infinitesense.GameView;
 import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;
 import com.infinitesense.gestores.Utilidades;
+import com.infinitesense.modelos.controles.ContadorMonedas;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -43,6 +44,8 @@ public class Nivel {
     private Bitmap mensaje;
     public boolean botonAgacharPulsado;
 
+    private ContadorMonedas contadorMonedas;
+
     public Nivel(Context context, int numeroNivel) throws Exception {
         inicializado = false;
 
@@ -68,6 +71,7 @@ public class Nivel {
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.description);
         fondo = new Fondo(context, CargadorGraficos.cargarDrawable(context, R.drawable.sunset_background));
         inicializarMapaTiles();
+        contadorMonedas = new ContadorMonedas(context);
     }
 
     /**
@@ -93,6 +97,23 @@ public class Nivel {
                 jugador.actualizar(tiempo);
                 aplicarReglasMovimiento();
                 aplicarReglasDeMovimiento2();
+
+
+                //Ahora necesito actualizar las tiles por el tema de los recolectables
+                for(int x = 0; x < anchoMapaTiles(); ++x) {
+                    for (int y = 0; y < altoMapaTiles(); ++y) {
+                        mapaTiles[x][y].actualizar(tiempo);
+
+                        if (mapaTiles[x][y] instanceof Moneda) {
+                            Moneda mo = (Moneda) mapaTiles[x][y];
+                            if (mo.colisiona(jugador, x, y) && !mo.isRecogido()) {
+                                mo.recoger();
+                                contadorMonedas.setPuntos(contadorMonedas.getPuntos() + 1);
+                            }
+                        }
+                    }
+                }
+
             }
         }
 
@@ -371,6 +392,7 @@ public class Nivel {
         }
         dibujarTiles(canvas);
         jugador.dibujar(canvas);
+        contadorMonedas.dibujar(canvas);
 
         if (nivelPausado) {
             // la foto mide 480x320
@@ -423,6 +445,9 @@ public class Nivel {
             case '.':
                 // en blanco, sin textura
                 return new Tile(null, Tile.PASABLE);
+            case 'C':
+                // Moneda
+                return new Moneda(context);
             case '1':
                 // Jugador
                 // Posicion centro abajo
@@ -534,6 +559,7 @@ public class Nivel {
 
         for (int y = arriba; y <= abajo; ++y) {
             for (int x = izquierda; x <= derecha; ++x) {
+                /*
                 if (mapaTiles[x][y].imagen != null) {
                     // Calcular la posición en pantalla correspondiente
                     // izquierda, arriba, derecha , abajo
@@ -546,6 +572,9 @@ public class Nivel {
 
                     mapaTiles[x][y].imagen.draw(canvas);
                 }
+                */
+
+                mapaTiles[x][y].dibujar(canvas,x,y);    //Sustituido lo anterior por esto y añadido método dibujar a Tile
             }
         }
     }
