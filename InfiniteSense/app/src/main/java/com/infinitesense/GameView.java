@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.infinitesense.gestores.GestorAudio;
 import com.infinitesense.modelos.Nivel;
 import com.infinitesense.modelos.controles.BotonAgachar;
 import com.infinitesense.modelos.controles.BotonGolpear;
@@ -31,6 +32,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private BotonAgachar botonAgachar;
     private Pad pad;
 
+    private GestorAudio gestorAudio;
+
 
     public GameView(Context context) {
         super(context);
@@ -43,6 +46,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         gameloop = new GameLoop(this);
         gameloop.setRunning(true);
     }
+
+    public void inicializarGestorAudio(Context context) {
+        gestorAudio = GestorAudio.getInstancia(context, R.raw.here_remix);
+        gestorAudio.reproducirMusicaAmbiente();
+        //Sonidos de interaccion
+        //gestorAudio.registrarSonido(GestorAudio.SONIDO_DISPARO_NAVE,
+        //        R.raw.nave_disparo);
+    }
+
 
 
     @Override
@@ -125,6 +137,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         botonAgachar= new BotonAgachar(context);
         pad = new Pad(context);
         nivel.gameview = this;
+        inicializarGestorAudio(context);
     }
 
     public void actualizar(long tiempo) throws Exception {
