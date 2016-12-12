@@ -10,8 +10,6 @@ import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;
 import com.infinitesense.modelos.Modelo;
 
-import static com.infinitesense.modelos.Tile.altura;
-
 /**
  * Created by MIGUEL on 05/12/2016.
  */

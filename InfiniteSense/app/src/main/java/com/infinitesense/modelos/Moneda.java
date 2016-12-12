@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;
 import com.infinitesense.graficos.Sprite;
+import com.infinitesense.modelos.Tiles.Tile;
 
 import java.util.HashMap;
 
@@ -55,6 +56,11 @@ public class Moneda extends Tile {
             sprite = sprites.get(RECOGIDO);
         else
             sprite = sprites.get(NUEVO);
+    }
+
+    @Override
+    public void interactuar(Jugador jugador) {
+        //Hay que pensarse que la moneda sea tile, mejor un objeto como hicimos en clase.
     }
 
     @Override

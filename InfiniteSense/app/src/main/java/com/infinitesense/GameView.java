@@ -48,11 +48,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void inicializarGestorAudio(Context context) {
-        gestorAudio = GestorAudio.getInstancia(context, R.raw.here_remix);
+        gestorAudio = GestorAudio.getInstancia(context, R.raw.dire_dire_docks);
         gestorAudio.reproducirMusicaAmbiente();
         //Sonidos de interaccion
-        //gestorAudio.registrarSonido(GestorAudio.SONIDO_DISPARO_NAVE,
-        //        R.raw.nave_disparo);
+        gestorAudio.registrarSonido(GestorAudio.SONIDO_NOTA,
+                R.raw.note_sound);
+        gestorAudio.registrarSonido(GestorAudio.SONIDO_MUERTE, R.raw.die_sound );
     }
 
 
@@ -110,8 +111,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         for (int i = 0; i < 6; i++) {
             if (accion[i] != NO_ACTION) {
                 if (accion[i] == ACTION_DOWN) {
-                    if (nivel.nivelPausado)
+                    if (nivel.nivelPausado) {
                         nivel.nivelPausado = false;
+                        GestorAudio.getInstancia().reproducirMusicaAmbiente();
+                    }
                 }
                 if (botonGolpear.estaPulsado(x[i], y[i])) {
                     if (accion[i] == ACTION_DOWN) {

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 
 import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;
+import com.infinitesense.gestores.GestorAudio;
 import com.infinitesense.graficos.Sprite;
 
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class Jugador extends Modelo {
     public static final String AGACHADO_DERECHA = "agachado_derecha";
 
     public boolean estadoGolpeando;
+    public boolean superSalto;
 
     double velocidadX;
     float velocidadY; // actual
@@ -177,7 +179,14 @@ public class Jugador extends Modelo {
         if (saltoPendiente) {
             saltoPendiente = false;
             enElAire = true;
-            velocidadY = velcidadSalto;
+            float impulso=this.velcidadSalto;
+            if(superSalto) {
+                impulso = (float) (this.velcidadSalto * 1.45);
+                GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_NOTA);
+            }
+
+
+            velocidadY = impulso;
         }
         if (velocidadX > 0) {
             sprite = sprites.get(CAMINANDO_DERECHA);

@@ -10,7 +10,11 @@ import android.util.Log;
 import com.infinitesense.GameView;
 import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;
+import com.infinitesense.gestores.GestorAudio;
 import com.infinitesense.gestores.Utilidades;
+import com.infinitesense.modelos.Tiles.Tile;
+import com.infinitesense.modelos.Tiles.TileNormal;
+import com.infinitesense.modelos.Tiles.TileNota;
 import com.infinitesense.modelos.controles.ContadorMonedas;
 
 import java.io.BufferedReader;
@@ -93,7 +97,7 @@ public class Nivel {
                 //TODO: Hay que comprobar colisiones contra que golpea
                 botonGolpearPulsado = false;
             }
-
+                actualizarIteraccionTiles();
                 jugador.actualizar(tiempo);
                 aplicarReglasMovimiento();
                 aplicarReglasDeMovimiento2();
@@ -116,6 +120,17 @@ public class Nivel {
 
             }
         }
+
+    private void actualizarIteraccionTiles() {
+        if(!jugador.enElAire) { //Los cambios relacionados con los tiles solo se producen si esta en el suelo.
+            int tileXJugador
+                    = (int) (jugador.x / Tile.ancho);
+            int tileYJugadorInferior
+                    = (int) (jugador.y + (jugador.altura / 2 - 1)) / Tile.altura+1; //si no le sumas uno no coge el de abajo.
+            Log.v("Debugging","Tile interaccion x: "+tileXJugador+"y inferior: "+tileYJugadorInferior);
+            mapaTiles[tileXJugador][tileYJugadorInferior].interactuar(jugador);
+        }
+    }
 
 
     private void aplicarReglasMovimiento() throws Exception {
@@ -326,11 +341,7 @@ public class Nivel {
 
                 if (jugador.y + jugador.altura / 2 > GameView.pantallaAlto) {
                     // ha perdido
-                    scrollEjeX = 0;
-                    scrollEjeY = 0;
-                    jugador.restablecerPosicionInicial();
-                    nivelPausado = true;
-                    mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
+                    jugadorPerder();
                 }
 
             }
@@ -360,11 +371,7 @@ public class Nivel {
 
         if(tileXJugadorCentro > anchoMapaTiles()-2){ //Ha perdido por chocar contra el fin del mapa.
             // ha perdido
-            scrollEjeX = 0;
-            scrollEjeY = 0;
-            jugador.restablecerPosicionInicial();
-            nivelPausado = true;
-            mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
+            jugadorPerder();
         }
         else if(//Si choca de frente contra un tile no pasable.
                 mapaTiles[tileXJugadorCentro+1][tileYJugadorInferior].tipoDeColision
@@ -374,16 +381,21 @@ public class Nivel {
                 mapaTiles[tileXJugadorCentro+1][tileYJugadorSuperior].tipoDeColision
                         == Tile.SOLIDO){
             // ha perdido
-            scrollEjeX = 0;
-            scrollEjeY = 0;
-            jugador.restablecerPosicionInicial();
-            nivelPausado = true;
-            mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
-
+            jugadorPerder();
 
         }
     }
 
+    private void jugadorPerder(){
+        scrollEjeX = 0;
+        scrollEjeY = 0;
+        jugador.restablecerPosicionInicial();
+        jugador.enElAire=false; //No funcionaba al morir antes.
+        nivelPausado = true;
+        mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
+        GestorAudio.getInstancia().pararMusicaAmbiente();
+        GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MUERTE);
+    }
 
 
     public void dibujar(Canvas canvas) {
@@ -432,6 +444,7 @@ public class Nivel {
      * A -> Tile suelo ABISMO DERECHA
      * w -> Tile agua SUPERFICIE
      * W -> Tile agua PROFUNDO
+     * M -> Tile de nota para salto mejorado.
      * <p>
      * No olvidar modificar el txt para modelar el mapa.
      *
@@ -444,7 +457,7 @@ public class Nivel {
         switch (codigoTile) {
             case '.':
                 // en blanco, sin textura
-                return new Tile(null, Tile.PASABLE);
+                return new TileNormal(null, Tile.PASABLE);
             case 'C':
                 // Moneda
                 return new Moneda(context);
@@ -455,47 +468,51 @@ public class Nivel {
                 int yCentroAbajoTile = y * Tile.altura + Tile.altura;
                 jugador = new Jugador(context, xCentroAbajoTile, yCentroAbajoTile);
 
-                return new Tile(null, Tile.PASABLE);
+                return new TileNormal(null, Tile.PASABLE);
             case 'g':
                 // bloque de musgo, no se puede pasar
-                return new Tile(CargadorGraficos.cargarDrawable(context,
+                return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_ground), Tile.SOLIDO);
 
             case 'G':
                 // bloque de musgo, no se puede pasar
-                return new Tile(CargadorGraficos.cargarDrawable(context,
+                return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_ground_pure), Tile.SOLIDO);
 
             case 'b':
                 // bloque de musgo, no se puede pasar
-                return new Tile(CargadorGraficos.cargarDrawable(context,
+                return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_ground_border_left), Tile.SOLIDO);
 
             case 'B':
                 // bloque de musgo, no se puede pasar
-                return new Tile(CargadorGraficos.cargarDrawable(context,
+                return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_ground_border_right), Tile.SOLIDO);
 
             case 'a':
                 // bloque de musgo, no se puede pasar
-                return new Tile(CargadorGraficos.cargarDrawable(context,
+                return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_ground_abyss_left), Tile.SOLIDO);
 
             case 'A':
                 // bloque de musgo, no se puede pasar
-                return new Tile(CargadorGraficos.cargarDrawable(context,
+                return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_ground_abyss_right), Tile.SOLIDO);
             case 'w':
                 // bloque de musgo, no se puede pasar
-                return new Tile(CargadorGraficos.cargarDrawable(context,
+                return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_water_surface), Tile.PASABLE);
             case 'W':
                 // bloque de musgo, no se puede pasar
-                return new Tile(CargadorGraficos.cargarDrawable(context,
+                return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_water_pure), Tile.PASABLE);
+            case 'M':
+                //bloque de nota musica, para salto mejorado.
+                return new TileNota(CargadorGraficos.cargarDrawable(context,
+                        R.drawable.note_block), Tile.SOLIDO);
             default:
                 //cualquier otro caso
-                return new Tile(null, Tile.PASABLE);
+                return new TileNormal(null, Tile.PASABLE);
         }
     }
 

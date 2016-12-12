@@ -8,9 +8,6 @@ import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;
 import com.infinitesense.modelos.Modelo;
 
-import static com.infinitesense.modelos.Tile.altura;
-import static com.infinitesense.modelos.Tile.ancho;
-
 /**
  * Created by juanfa on 5/10/16.
  */
