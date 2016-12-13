@@ -120,6 +120,7 @@ public class Nivel {
                             if (mo.colisiona(jugador, x, y) && !mo.isRecogido()) {
                                 mo.recoger();
                                 contadorMonedas.setPuntos(contadorMonedas.getPuntos() + 1);
+                                GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MONEDA);
                             }
                         }
                     }
