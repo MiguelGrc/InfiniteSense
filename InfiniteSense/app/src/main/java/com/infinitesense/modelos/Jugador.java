@@ -80,7 +80,7 @@ public class Jugador extends Modelo {
 
         Sprite paradoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.idle_ninja),
-                ancho, altura, 10, 10, true);
+                ancho, altura, 30, 10, true);
         sprites.put(PARADO_DERECHA, paradoDerecha);
 
         Sprite paradoIzquierda = new Sprite(
@@ -93,7 +93,7 @@ public class Jugador extends Modelo {
 
         Sprite caminandoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.run_ninja),
-                ancho, altura, 10, 10, true);
+                ancho, altura, 30, 10, true);
         sprites.put(CAMINANDO_DERECHA, caminandoDerecha);
 
         Sprite caminandoIzquierda = new Sprite(
@@ -104,7 +104,7 @@ public class Jugador extends Modelo {
 
         Sprite saltandoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.jump_ninja),
-                ancho, altura, 10, 10, true);
+                ancho, altura, 30, 10, true);
         sprites.put(SALTANDO_DERECHA, saltandoDerecha);
 
         Sprite saltandoIzquierda = new Sprite(
@@ -118,7 +118,7 @@ public class Jugador extends Modelo {
         Sprite golpeandoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.attack_ninja),
                 ancho, altura,
-                5, 10, false);
+                30, 5, false);
         sprites.put(GOLPEANDO_DERECHA, golpeandoDerecha);
 
         Sprite golpeandoIzquierda = new Sprite(
@@ -131,7 +131,7 @@ public class Jugador extends Modelo {
 
         Sprite agachadoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.slide_ninja),
-                ancho, altura, 10, 8, true);
+                ancho, altura, 30, 8, true);
         sprites.put(AGACHADO_DERECHA, agachadoDerecha);
 
         Sprite agachadoIzquierda = new Sprite(
@@ -144,7 +144,7 @@ public class Jugador extends Modelo {
 
         Sprite golpeadoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.slide_ninja),
-                ancho, altura, 10, 4, false);
+                ancho, altura, 30, 4, false);
         sprites.put(GOLPEADO_DERECHA, golpeadoDerecha);
 
         Sprite golpeadoIzquierda = new Sprite(

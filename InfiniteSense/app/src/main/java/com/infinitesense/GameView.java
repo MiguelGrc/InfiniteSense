@@ -55,6 +55,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 R.raw.note_sound);
         gestorAudio.registrarSonido(GestorAudio.SONIDO_MUERTE, R.raw.die_sound );
         gestorAudio.registrarSonido(GestorAudio.SONIDO_MONEDA, R.raw.coin_sound );
+        gestorAudio.registrarSonido(GestorAudio.SONIDO_DESTRUIR, R.raw.concrete_break );
     }
 
 

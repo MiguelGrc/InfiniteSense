@@ -2,6 +2,7 @@ package com.infinitesense.modelos;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;
@@ -14,9 +15,7 @@ import java.util.HashMap;
  * Created by MIGUEL on 05/12/2016.
  */
 
-public class Moneda extends Tile {
-
-    private Context context;
+public class Moneda extends Modelo {
 
     private Sprite sprite;
     private HashMap<String,Sprite> sprites = new HashMap<String,Sprite> ();
@@ -26,14 +25,9 @@ public class Moneda extends Tile {
     public static final String NUEVO = "Nuevo";
     public static final String RECOGIDO = "Recogido";
 
-    public Moneda(Context context) {
-        super(null, PASABLE);
-        this.context = context;
+    public Moneda(Context context, double x, double y) {
+        super(context, x, y, 40, 40);
 
-        inicializar();
-    }
-
-    private void inicializar(){
         Sprite nuevo = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.animacion_recolectable),
                 40, 40,
@@ -50,27 +44,26 @@ public class Moneda extends Tile {
     }
 
     @Override
-    public void actualizar(long tiempo){
-        sprite.actualizar(tiempo);
-        if (recogido)
-            sprite = sprites.get(RECOGIDO);
-        else
-            sprite = sprites.get(NUEVO);
+    public void dibujar(Canvas canvas){
+        sprite.dibujarSprite(canvas, (int) x - Nivel.scrollEjeX, (int) (y-15-Nivel.scrollEjeY));
     }
 
-    @Override
-    public void interactuar(Jugador jugador) {
-        //Hay que pensarse que la moneda sea tile, mejor un objeto como hicimos en clase.
+    public boolean actualizar(Long tiempo){
+        return sprite.actualizar(tiempo);
     }
 
-    @Override
-    public void dibujar(Canvas canvas, int x, int y){
-        //sprite.dibujarSprite(canvas, (int) x - Nivel.scrollEjeX, (int) y);
-        sprite.dibujarSprite(canvas, (x * ancho + ancho/2) - Nivel.scrollEjeX, (y * altura + altura/2) - Nivel.scrollEjeY);
-    }
+//    @Override
+//    public void actualizar(long tiempo){
+//        sprite.actualizar(tiempo);
+//        if (recogido)
+//            sprite = sprites.get(RECOGIDO);
+//        else
+//            sprite = sprites.get(NUEVO);
+//    }
 
     public void recoger(){
         recogido = true;
+        sprite = sprites.get(RECOGIDO);
     }
 
     public boolean isRecogido(){
@@ -81,20 +74,23 @@ public class Moneda extends Tile {
         this.recogido = recogido;
     }
 
-    //From ships game
-    public boolean colisiona(Jugador jugador, int x, int y){
-        boolean colisiona = false;
+//    //From ships game
+//    public boolean colisiona(Jugador jugador, int x, int y){
+//        boolean colisiona = false;
+//
+//        if ((jugador.x < (x + 1) * ancho)
+//                && (jugador.x > x * ancho)
+//                && (y * altura < jugador.y)
+//                && ((y + 1) * altura > jugador.y)) {
+//            colisiona = true;
+//        }
+//
+//        return colisiona;
+//    }
 
-        if ((jugador.x < (x + 1) * ancho)
-                && (jugador.x > x * ancho)
-                && (y * altura < jugador.y)
-                && ((y + 1) * altura > jugador.y)) {
-            colisiona = true;
-        }
-
-        return colisiona;
+    public void reiniciar(){
+        recogido = false;
+        sprite= sprites.get(NUEVO);
     }
-
-
 
 }

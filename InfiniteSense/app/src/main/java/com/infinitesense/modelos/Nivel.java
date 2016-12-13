@@ -49,6 +49,7 @@ public class Nivel {
     public boolean botonAgacharPulsado;
 
     public LinkedList<Obstaculo> obstaculos;
+    public LinkedList<Moneda> monedas;
 
     private ContadorMonedas contadorMonedas;
 
@@ -75,6 +76,7 @@ public class Nivel {
         scrollEjeY = 0;
 
         obstaculos= new LinkedList<Obstaculo>();
+        monedas= new LinkedList<Moneda>();
 
 
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.description);
@@ -110,21 +112,21 @@ public class Nivel {
                 actualizarElementos(tiempo);
 
 
-                //Ahora necesito actualizar las tiles por el tema de los recolectables
-                for(int x = 0; x < anchoMapaTiles(); ++x) {
-                    for (int y = 0; y < altoMapaTiles(); ++y) {
-                        mapaTiles[x][y].actualizar(tiempo);
-
-                        if (mapaTiles[x][y] instanceof Moneda) {
-                            Moneda mo = (Moneda) mapaTiles[x][y];
-                            if (mo.colisiona(jugador, x, y) && !mo.isRecogido()) {
-                                mo.recoger();
-                                contadorMonedas.setPuntos(contadorMonedas.getPuntos() + 1);
-                                GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MONEDA);
-                            }
-                        }
-                    }
-                }
+//                //Ahora necesito actualizar las tiles por el tema de los recolectables
+//                for(int x = 0; x < anchoMapaTiles(); ++x) {
+//                    for (int y = 0; y < altoMapaTiles(); ++y) {
+//                        mapaTiles[x][y].actualizar(tiempo);
+//
+//                        if (mapaTiles[x][y] instanceof Moneda) {
+//                            Moneda mo = (Moneda) mapaTiles[x][y];
+//                            if (mo.colisiona(jugador, x, y) && !mo.isRecogido()) {
+//                                mo.recoger();
+//                                contadorMonedas.setPuntos(contadorMonedas.getPuntos() + 1);
+//                                GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MONEDA);
+//                            }
+//                        }
+//                    }
+//                }
 
             }
         }
@@ -138,6 +140,16 @@ public class Nivel {
         }
         if(obstaculoADestruir!=null){
             //obstaculos.remove(obstaculoADestruir); //En realidad no se puede destruir, ya que al iniciar de nuevo el juego debería resetearse.
+        }
+
+        Moneda monedaADestruir = null;
+        for(Moneda mo : monedas){
+            if(mo.actualizar(tiempo)){
+                monedaADestruir = mo;
+            }
+        }
+        if(monedaADestruir != null){
+            //
         }
     }
 
@@ -416,6 +428,7 @@ public class Nivel {
         jugador.enElAire=false; //No funcionaba al morir antes.
         nivelPausado = true;
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
+        contadorMonedas = new ContadorMonedas(context);
         GestorAudio.getInstancia().pararMusicaAmbiente();
         GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MUERTE);
         reiniciarElementosDestruidos(); //Hay que reiniciar lo destruido;
@@ -428,6 +441,10 @@ public class Nivel {
     private void reiniciarElementosDestruidos() {
         for(Obstaculo obs: obstaculos){
             obs.reiniciar();
+        }
+
+        for(Moneda mo: monedas){
+            mo.reiniciar();
         }
 
     }
@@ -443,6 +460,10 @@ public class Nivel {
 
         for(Obstaculo obs: obstaculos){
             obs.dibujar(canvas);
+        }
+
+        for(Moneda mo: monedas){
+            mo.dibujar(canvas);
         }
 
         if (nivelPausado) {
@@ -503,7 +524,8 @@ public class Nivel {
                 return new TileNormal(null, Tile.PASABLE);
             case 'C':
                 // Moneda
-                return new Moneda(context);
+                monedas.add(new Moneda(context,x * Tile.ancho + Tile.ancho/2,y * Tile.altura + Tile.altura));
+                return new TileNormal(null,Tile.PASABLE);
             case '1':
                 // Jugador
                 // Posicion centro abajo
@@ -693,10 +715,19 @@ public class Nivel {
             if(obs.colisiona(jugador) && obs.estado==obs.NORMAL){ //Si se dan y el obstaculo esta normal.
                 if(jugador.estadoGolpeando){
                     obs.destruir();
+                    GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_DESTRUIR);
                 }
                 else{
                     jugadorPerder();
                 }
+            }
+        }
+
+        for(Moneda mo: monedas){
+            if(mo.colisiona(jugador) && mo.isRecogido()==false){ //Si la moneda no está recogida
+                mo.recoger();
+                contadorMonedas.setPuntos(contadorMonedas.getPuntos() + 1);
+                GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MONEDA);
             }
         }
     }
