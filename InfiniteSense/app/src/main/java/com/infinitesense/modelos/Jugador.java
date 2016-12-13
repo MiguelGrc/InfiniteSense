@@ -81,13 +81,13 @@ public class Jugador extends Modelo {
         Sprite paradoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playeridleright),
                 ancho, altura,
-                4, 8, true);
+                8, 8, true);
         sprites.put(PARADO_DERECHA, paradoDerecha);
 
         Sprite paradoIzquierda = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playeridle),
                 ancho, altura,
-                4, 8, true);
+                8, 8, true);
         sprites.put(PARADO_IZQUIERDA, paradoIzquierda);
 
 // animación actual
@@ -95,25 +95,25 @@ public class Jugador extends Modelo {
         Sprite caminandoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playerrunright),
                 ancho, altura,
-                4, 8, true);
+                8, 8, true);
         sprites.put(CAMINANDO_DERECHA, caminandoDerecha);
 
         Sprite caminandoIzquierda = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playerrun),
                 ancho, altura,
-                4, 8, true);
+                8, 8, true);
         sprites.put(CAMINANDO_IZQUIERDA, caminandoIzquierda);
 
         Sprite saltandoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playerjumpright),
                 ancho, altura,
-                4, 4, true);
+                8, 4, true);
         sprites.put(SALTANDO_DERECHA, saltandoDerecha);
 
         Sprite saltandoIzquierda = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playerjump),
                 ancho, altura,
-                4, 4, true);
+                8, 4, true);
         sprites.put(SALTANDO_IZQUIERDA, saltandoIzquierda);
 
         //Golpeando
@@ -121,13 +121,13 @@ public class Jugador extends Modelo {
         Sprite golpeandoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playershootright),
                 ancho, altura,
-                4, 4, false);
+                8, 4, false);
         sprites.put(GOLPEANDO_DERECHA, golpeandoDerecha);
 
         Sprite golpeandoIzquierda = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playershoot),
                 ancho, altura,
-                4, 4, false);
+                8, 4, false);
         sprites.put(GOLPEANDO_IZQUIERDA, golpeandoIzquierda);
 
         //Agachado TODO: Cambiar los sprites por los de agachado
@@ -135,13 +135,13 @@ public class Jugador extends Modelo {
         Sprite agachadoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playeridle),
                 ancho, altura,
-                4, 8, true);
+                8, 8, true);
         sprites.put(AGACHADO_DERECHA, agachadoDerecha);
 
         Sprite agachadoIzquierda = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playeridle),
                 ancho, altura,
-                4, 8, true);
+                8, 8, true);
         sprites.put(AGACHADO_IZQUIERDA, agachadoIzquierda);
 
         //golpeado
@@ -149,13 +149,13 @@ public class Jugador extends Modelo {
         Sprite golpeadoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playerimpactright),
                 ancho, altura,
-                4, 4, false);
+                8, 4, false);
         sprites.put(GOLPEADO_DERECHA, golpeadoDerecha);
 
         Sprite golpeadoIzquierda = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.playerimpact),
                 ancho, altura,
-                4, 4, false);
+                8, 4, false);
         sprites.put(GOLPEADO_IZQUIERDA, golpeadoIzquierda);
 
         sprite = paradoDerecha;

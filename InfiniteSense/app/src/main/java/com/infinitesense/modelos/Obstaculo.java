@@ -24,7 +24,7 @@ public class Obstaculo extends Modelo {
         super(context, x, y, 32, 32);
 
 
-        sprites.put(GOLPEADO,new Sprite(CargadorGraficos.cargarDrawable(context, R.drawable.animacion_caja_explosion),ancho, altura,5,10,false));
+        sprites.put(GOLPEADO,new Sprite(CargadorGraficos.cargarDrawable(context, R.drawable.animacion_caja_explosion),ancho, altura,30,10,false));
         sprites.put(NORMAL, new Sprite(CargadorGraficos.cargarDrawable(context,R.drawable.caja_explosion),ancho,altura,1,1,true));
         sprite=sprites.get(NORMAL);
     }

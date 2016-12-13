@@ -35,15 +35,15 @@ public class Moneda extends Tile {
 
     private void inicializar(){
         Sprite nuevo = new Sprite(
-                CargadorGraficos.cargarDrawable(context, R.drawable.gem),
-                32, 32,
-                8, 8, true);
+                CargadorGraficos.cargarDrawable(context, R.drawable.animacion_recolectable),
+                40, 40,
+                15, 8, true);
         sprites.put(NUEVO, nuevo);
 
         Sprite recogido = new Sprite(
-                CargadorGraficos.cargarDrawable(context, R.drawable.item_on_collected),
-                96, 96,
-                12, 10, false);
+                CargadorGraficos.cargarDrawable(context, R.drawable.animacion_disparo1),
+                40, 32,
+                15, 4, false);
         sprites.put(RECOGIDO, recogido);
 
         sprite = nuevo;
