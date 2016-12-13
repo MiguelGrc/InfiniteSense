@@ -48,6 +48,8 @@ public class Nivel {
     private Bitmap mensaje;
     public boolean botonAgacharPulsado;
 
+    public LinkedList<Obstaculo> obstaculos;
+
     private ContadorMonedas contadorMonedas;
 
     public Nivel(Context context, int numeroNivel) throws Exception {
@@ -71,6 +73,9 @@ public class Nivel {
     public void inicializar() throws Exception {
         scrollEjeX = 0;
         scrollEjeY = 0;
+
+        obstaculos= new LinkedList<Obstaculo>();
+
 
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.description);
         fondo = new Fondo(context, CargadorGraficos.cargarDrawable(context, R.drawable.sunset_background));
@@ -101,6 +106,8 @@ public class Nivel {
                 jugador.actualizar(tiempo);
                 aplicarReglasMovimiento();
                 aplicarReglasDeMovimiento2();
+                comprobarColisiones();
+                actualizarElementos(tiempo);
 
 
                 //Ahora necesito actualizar las tiles por el tema de los recolectables
@@ -120,6 +127,18 @@ public class Nivel {
 
             }
         }
+
+    private void actualizarElementos(Long tiempo) {
+        Obstaculo obstaculoADestruir= null;
+        for(Obstaculo obs: obstaculos){
+            if(obs.actualizar(tiempo)){//Actualiza y si se ha acabado el sprite se destruye.
+                obstaculoADestruir=obs;
+            }
+        }
+        if(obstaculoADestruir!=null){
+            //obstaculos.remove(obstaculoADestruir); //En realidad no se puede destruir, ya que al iniciar de nuevo el juego debería resetearse.
+        }
+    }
 
     private void actualizarIteraccionTiles() {
         if(!jugador.enElAire) { //Los cambios relacionados con los tiles solo se producen si esta en el suelo.
@@ -386,6 +405,9 @@ public class Nivel {
         }
     }
 
+    /**
+     * Lo prepara todo cuando el jugador muere.
+     */
     private void jugadorPerder(){
         scrollEjeX = 0;
         scrollEjeY = 0;
@@ -395,6 +417,18 @@ public class Nivel {
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
         GestorAudio.getInstancia().pararMusicaAmbiente();
         GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MUERTE);
+        reiniciarElementosDestruidos(); //Hay que reiniciar lo destruido;
+
+    }
+
+    /**
+     * Reinicia los elementos En caso de que fueran destruidos o cambiados de estado a como deberian estar al iniciar el juego.
+     */
+    private void reiniciarElementosDestruidos() {
+        for(Obstaculo obs: obstaculos){
+            obs.reiniciar();
+        }
+
     }
 
 
@@ -405,6 +439,10 @@ public class Nivel {
         dibujarTiles(canvas);
         jugador.dibujar(canvas);
         contadorMonedas.dibujar(canvas);
+
+        for(Obstaculo obs: obstaculos){
+            obs.dibujar(canvas);
+        }
 
         if (nivelPausado) {
             // la foto mide 480x320
@@ -445,6 +483,7 @@ public class Nivel {
      * w -> Tile agua SUPERFICIE
      * W -> Tile agua PROFUNDO
      * M -> Tile de nota para salto mejorado.
+     * O -> Obstaculo.
      * <p>
      * No olvidar modificar el txt para modelar el mapa.
      *
@@ -454,6 +493,9 @@ public class Nivel {
      * @return El tile creado para añadir a la lista de Tiles.
      */
     private Tile inicializarTile(char codigoTile, int x, int y) {
+        //Para crear objetos(calcular la posición que le corresponde.):
+        //int xCentroAbajoTile = x * Tile.ancho + Tile.ancho/2;
+        //int yCentroAbajoTile = y * Tile.altura + Tile.altura;
         switch (codigoTile) {
             case '.':
                 // en blanco, sin textura
@@ -510,6 +552,11 @@ public class Nivel {
                 //bloque de nota musica, para salto mejorado.
                 return new TileNota(CargadorGraficos.cargarDrawable(context,
                         R.drawable.note_block), Tile.SOLIDO);
+            case 'O':
+                //Obstaculo.
+                obstaculos.add(new Obstaculo(context,x * Tile.ancho + Tile.ancho/2,y * Tile.altura + Tile.altura));
+                return new TileNormal(null,Tile.PASABLE);
+
             default:
                 //cualquier otro caso
                 return new TileNormal(null, Tile.PASABLE);
@@ -637,6 +684,18 @@ public class Nivel {
             for (int x = 0; x < anchoMapaTiles(); ++x) {
                 char tipoDeTile = lineas.get(y).charAt(x);//lines[y][x];
                 mapaTiles[x][y] = inicializarTile(tipoDeTile, x, y);
+            }
+        }
+    }
+    private void comprobarColisiones(){
+        for(Obstaculo obs: obstaculos){
+            if(obs.colisiona(jugador) && obs.estado==obs.NORMAL){ //Si se dan y el obstaculo esta normal.
+                if(jugador.estadoGolpeando){
+                    obs.destruir();
+                }
+                else{
+                    jugadorPerder();
+                }
             }
         }
     }
