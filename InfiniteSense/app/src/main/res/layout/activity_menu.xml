@@ -9,17 +9,17 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.simple.MenuActivity"
-    android:background="@drawable/menu_titulo"
+    tools:context="com.infinitesense.MenuActivity"
+    android:background="@drawable/start"
     android:foregroundGravity="center"
     android:layout_gravity="center">
 
     <ImageButton
         android:layout_width="235dp"
         android:layout_height="50dp"
-        app:srcCompat="@drawable/boton_jugar"
+        app:srcCompat="@drawable/startbutton"
         android:id="@+id/imageButton"
         android:foregroundGravity="center"
         android:layout_gravity="center"
-        android:background="@drawable/boton_jugar" />
+        android:background="@drawable/startbutton" />
 </FrameLayout>
