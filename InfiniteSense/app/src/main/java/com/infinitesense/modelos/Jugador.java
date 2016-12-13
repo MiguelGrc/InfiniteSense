@@ -118,7 +118,7 @@ public class Jugador extends Modelo {
         Sprite golpeandoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.attack_ninja),
                 ancho, altura,
-                5, 10, false);
+                10, 5, false);
         sprites.put(GOLPEANDO_DERECHA, golpeandoDerecha);
 
         Sprite golpeandoIzquierda = new Sprite(
@@ -135,9 +135,9 @@ public class Jugador extends Modelo {
         sprites.put(AGACHADO_DERECHA, agachadoDerecha);
 
         Sprite agachadoIzquierda = new Sprite(
-                CargadorGraficos.cargarDrawable(context, R.drawable.playeridle),
+                CargadorGraficos.cargarDrawable(context, R.drawable.slide_ninja),
                 ancho, altura,
-                8, 8, true);
+                10, 8, true);
         sprites.put(AGACHADO_IZQUIERDA, agachadoIzquierda);
 
         //golpeado
