@@ -116,9 +116,9 @@ public class Jugador extends Modelo {
         //Golpeando
 
         Sprite golpeandoDerecha = new Sprite(
-                CargadorGraficos.cargarDrawable(context, R.drawable.playershootright),
+                CargadorGraficos.cargarDrawable(context, R.drawable.attack_ninja),
                 ancho, altura,
-                8, 4, false);
+                5, 10, false);
         sprites.put(GOLPEANDO_DERECHA, golpeandoDerecha);
 
         Sprite golpeandoIzquierda = new Sprite(
