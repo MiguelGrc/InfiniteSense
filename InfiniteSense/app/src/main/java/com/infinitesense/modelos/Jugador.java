@@ -53,7 +53,7 @@ public class Jugador extends Modelo {
     public static final int DERECHA = 1;
     public static final int IZQUIERDA = -1;
     public boolean golpeado = false;
-    private boolean estadoAgachado;
+    public boolean estadoAgachado;
 
     public Jugador(Context context, double xInicial, double yInicial) {
         super(context, 0, 0, 40, 40);
@@ -231,13 +231,17 @@ public class Jugador extends Modelo {
         if (orientacion == IZQUIERDA){
             sprite= sprites.get(AGACHADO_IZQUIERDA);
             //TODO: Cambiar las colisiones para que solo sea para la mitad del tile.
+        }
+        else {
+            sprite= sprites.get(AGACHADO_IZQUIERDA);
+            //ancho=20;
+            //altura=20;
+            //y=y-20;
+
             cDerecha = ancho/2;
             cIzquierda = ancho/2;
             cArriba = altura/2;
             cAbajo = altura/2;
-        }
-        else {
-            sprite= sprites.get(AGACHADO_IZQUIERDA);
         }
     }
 
@@ -266,6 +270,8 @@ public class Jugador extends Modelo {
                 velocidadY += 2;
                 estadoAgachado = true;
             } else {
+
+                //resetearDimensiones();
                 velocidadX = 5;
                 estadoAgachado = false;
             }
@@ -275,8 +281,7 @@ public class Jugador extends Modelo {
                 sprites.get(GOLPEANDO_DERECHA).setFrameActual(0);
                 sprites.get(GOLPEANDO_IZQUIERDA).setFrameActual(0);
             }
-        }
-        else{
+        } else {
             sprite = sprites.get(PARADO_DERECHA);
             velocidadX = 0;
             velocidadY = 0;

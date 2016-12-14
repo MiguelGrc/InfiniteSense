@@ -199,14 +199,14 @@ public class Nivel {
                             Tile.PASABLE &&
                     mapaTiles[tileXJugadorDerecha + 1][tileYJugadorCentro].tipoDeColision ==
                             Tile.PASABLE &&
-                    mapaTiles[tileXJugadorDerecha + 1][tileYJugadorSuperior].tipoDeColision ==
-                            Tile.PASABLE &&
+                    (mapaTiles[tileXJugadorDerecha + 1][tileYJugadorSuperior].tipoDeColision ==
+                            Tile.PASABLE || jugador.estadoAgachado) &&
                     mapaTiles[tileXJugadorDerecha][tileYJugadorInferior].tipoDeColision ==
                             Tile.PASABLE &&
                     mapaTiles[tileXJugadorDerecha][tileYJugadorCentro].tipoDeColision ==
                             Tile.PASABLE &&
-                    mapaTiles[tileXJugadorDerecha][tileYJugadorSuperior].tipoDeColision ==
-                            Tile.PASABLE) {
+                    (mapaTiles[tileXJugadorDerecha][tileYJugadorSuperior].tipoDeColision ==
+                            Tile.PASABLE || jugador.estadoAgachado)) {
 
                 jugador.x += jugador.velocidadX;
 
@@ -220,8 +220,8 @@ public class Nivel {
                             Tile.PASABLE &&
                     mapaTiles[tileXJugadorDerecha][tileYJugadorCentro].tipoDeColision ==
                             Tile.PASABLE &&
-                    mapaTiles[tileXJugadorDerecha][tileYJugadorSuperior].tipoDeColision ==
-                            Tile.PASABLE) {
+                    (mapaTiles[tileXJugadorDerecha][tileYJugadorSuperior].tipoDeColision ==
+                            Tile.PASABLE || jugador.estadoAgachado) ) {
 
 
                 // Si en el propio tile del jugador queda espacio para
@@ -248,14 +248,14 @@ public class Nivel {
                             Tile.PASABLE &&
                     mapaTiles[tileXJugadorIzquierda - 1][tileYJugadorCentro].tipoDeColision ==
                             Tile.PASABLE &&
-                    mapaTiles[tileXJugadorIzquierda - 1][tileYJugadorSuperior].tipoDeColision ==
-                            Tile.PASABLE &&
+                    (mapaTiles[tileXJugadorIzquierda - 1][tileYJugadorSuperior].tipoDeColision ==
+                            Tile.PASABLE || jugador.estadoAgachado) &&
                     mapaTiles[tileXJugadorIzquierda][tileYJugadorInferior].tipoDeColision ==
                             Tile.PASABLE &&
                     mapaTiles[tileXJugadorIzquierda][tileYJugadorCentro].tipoDeColision ==
                             Tile.PASABLE &&
-                    mapaTiles[tileXJugadorIzquierda][tileYJugadorSuperior].tipoDeColision ==
-                            Tile.PASABLE) {
+                    (mapaTiles[tileXJugadorIzquierda][tileYJugadorSuperior].tipoDeColision ==
+                            Tile.PASABLE || jugador.estadoAgachado)) {
 
                 jugador.x += jugador.velocidadX;
 
@@ -266,8 +266,8 @@ public class Nivel {
                             == Tile.PASABLE &&
                     mapaTiles[tileXJugadorIzquierda][tileYJugadorCentro].tipoDeColision
                             == Tile.PASABLE &&
-                    mapaTiles[tileXJugadorIzquierda][tileYJugadorSuperior].tipoDeColision
-                            == Tile.PASABLE) {
+                    (mapaTiles[tileXJugadorIzquierda][tileYJugadorSuperior].tipoDeColision
+                            == Tile.PASABLE && jugador.estadoAgachado)) {
 
                 // Si en el propio tile del jugador queda espacio para
               /*  // avanzar más, avanzo
@@ -397,7 +397,7 @@ public class Nivel {
         int tileYJugadorCentro
                 = (int) jugador.y / Tile.altura;
         int tileYJugadorSuperior
-                = (int) (jugador.y - (jugador.altura / 2 - 1)) / Tile.altura;
+                = (int) (jugador.y - (jugador.altura / 2 - 1))/ Tile.altura;
 //        Log.v("Debug","TileXDown: "+mapaTiles[tileXJugadorCentro][tileYJugadorInferior].tipoDeColision+"tileXStraight: "+ mapaTiles[tileXJugadorCentro][tileYJugadorCentro].tipoDeColision+
 //        "TileXUp: "+mapaTiles[tileXJugadorCentro][tileYJugadorSuperior].tipoDeColision); //Para debugear.
 
@@ -408,10 +408,10 @@ public class Nivel {
         else if(//Si choca de frente contra un tile no pasable.
                 mapaTiles[tileXJugadorCentro+1][tileYJugadorInferior].tipoDeColision
                         == Tile.SOLIDO ||
-                mapaTiles[tileXJugadorCentro+1][tileYJugadorCentro].tipoDeColision
+                        mapaTiles[tileXJugadorCentro+1][tileYJugadorCentro].tipoDeColision
                         == Tile.SOLIDO ||
-                mapaTiles[tileXJugadorCentro+1][tileYJugadorSuperior].tipoDeColision
-                        == Tile.SOLIDO){
+                        (mapaTiles[tileXJugadorCentro+1][tileYJugadorSuperior].tipoDeColision
+                        == Tile.SOLIDO && !jugador.estadoAgachado)){
             // ha perdido
             jugadorPerder();
 
