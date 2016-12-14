@@ -136,7 +136,7 @@ public class Jugador extends Modelo {
         Sprite agachadoIzquierda = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.slide_ninja),
                 ancho, altura,
-                10, 8, true);
+                30, 10, true);
         sprites.put(AGACHADO_IZQUIERDA, agachadoIzquierda);
 
         //golpeado
