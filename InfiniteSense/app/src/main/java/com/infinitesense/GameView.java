@@ -116,6 +116,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     if (nivel.nivelPausado) {
                         nivel.nivelPausado = false;
                         GestorAudio.getInstancia().reproducirMusicaAmbiente();
+                        nivel.restaurarNivel();
                     }
                 }
                 if (botonGolpear.estaPulsado(x[i], y[i])) {

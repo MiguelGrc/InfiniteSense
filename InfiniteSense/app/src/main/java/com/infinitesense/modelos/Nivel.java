@@ -13,9 +13,12 @@ import com.infinitesense.gestores.CargadorGraficos;
 import com.infinitesense.gestores.GestorAudio;
 import com.infinitesense.gestores.Utilidades;
 import com.infinitesense.modelos.Tiles.Tile;
+import com.infinitesense.modelos.Tiles.TileMeta;
 import com.infinitesense.modelos.Tiles.TileNormal;
 import com.infinitesense.modelos.Tiles.TileNota;
 import com.infinitesense.modelos.controles.ContadorMonedas;
+import com.infinitesense.modelos.controles.ContadorTiempo;
+import com.infinitesense.modelos.controles.ContadorTiempoGanar;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -39,9 +42,10 @@ public class Nivel {
     private float velocidadGravedad = 0.8f;
     private float velocidadMaximaCaida = 10;
 
-    public boolean nivelPausado;
+    public static boolean nivelPausado;
     public boolean botonGolpearPulsado;
     public boolean botonSaltarPulsado;
+
 
 
     public GameView gameview;
@@ -52,6 +56,8 @@ public class Nivel {
     public LinkedList<Moneda> monedas;
 
     private ContadorMonedas contadorMonedas;
+    private ContadorTiempo contadorTiempo;
+    private ContadorTiempoGanar contadorTiempoGanar;
 
     public Nivel(Context context, int numeroNivel) throws Exception {
         inicializado = false;
@@ -83,6 +89,8 @@ public class Nivel {
         fondo = new Fondo(context, CargadorGraficos.cargarDrawable(context, R.drawable.sunset_background));
         inicializarMapaTiles();
         contadorMonedas = new ContadorMonedas(context);
+        contadorTiempo = new ContadorTiempo(context);
+        contadorTiempoGanar = new ContadorTiempoGanar(context);
     }
 
     /**
@@ -111,23 +119,6 @@ public class Nivel {
                 comprobarColisiones();
                 actualizarElementos(tiempo);
 
-
-//                //Ahora necesito actualizar las tiles por el tema de los recolectables
-//                for(int x = 0; x < anchoMapaTiles(); ++x) {
-//                    for (int y = 0; y < altoMapaTiles(); ++y) {
-//                        mapaTiles[x][y].actualizar(tiempo);
-//
-//                        if (mapaTiles[x][y] instanceof Moneda) {
-//                            Moneda mo = (Moneda) mapaTiles[x][y];
-//                            if (mo.colisiona(jugador, x, y) && !mo.isRecogido()) {
-//                                mo.recoger();
-//                                contadorMonedas.setPuntos(contadorMonedas.getPuntos() + 1);
-//                                GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MONEDA);
-//                            }
-//                        }
-//                    }
-//                }
-
             }
         }
 
@@ -151,6 +142,8 @@ public class Nivel {
         if(monedaADestruir != null){
             //
         }
+
+        contadorTiempo.actualizar(tiempo);
     }
 
     private void actualizarIteraccionTiles() {
@@ -429,10 +422,29 @@ public class Nivel {
         nivelPausado = true;
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
         contadorMonedas = new ContadorMonedas(context);
+        contadorTiempo = new ContadorTiempo(context);
         GestorAudio.getInstancia().pararMusicaAmbiente();
         GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MUERTE);
         reiniciarElementosDestruidos(); //Hay que reiniciar lo destruido;
 
+    }
+
+    public void restaurarNivel(){
+        scrollEjeX = 0;
+        scrollEjeY = 0;
+        jugador.restablecerPosicionInicial();
+        jugador.enElAire=false; //No funcionaba al morir antes.
+        contadorMonedas = new ContadorMonedas(context);
+        contadorTiempo = new ContadorTiempo(context);
+        GestorAudio.getInstancia().pararMusicaAmbiente();
+        reiniciarElementosDestruidos();
+    }
+
+    public void ganar() {
+
+        nivelPausado=true;
+        mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_win);
+        contadorTiempoGanar.habilitar(contadorTiempo.tiempoEnMin);
     }
 
     /**
@@ -457,6 +469,8 @@ public class Nivel {
         dibujarTiles(canvas);
         jugador.dibujar(canvas);
         contadorMonedas.dibujar(canvas);
+        contadorTiempo.dibujar(canvas);
+        contadorTiempoGanar.dibujar(canvas);
 
         for(Obstaculo obs: obstaculos){
             obs.dibujar(canvas);
@@ -480,6 +494,11 @@ public class Nivel {
                     (int) (GameView.pantallaAlto / 2 + 320 / 2));
             canvas.drawBitmap(mensaje, orgigen, destino, null);
         }
+        if(!nivelPausado){
+            contadorTiempoGanar.deshabilitar();
+        }
+
+
     }
 
 
@@ -506,6 +525,7 @@ public class Nivel {
      * W -> Tile agua PROFUNDO
      * M -> Tile de nota para salto mejorado.
      * O -> Obstaculo.
+     * F -> Meta.
      * <p>
      * No olvidar modificar el txt para modelar el mapa.
      *
@@ -579,6 +599,9 @@ public class Nivel {
                 //Obstaculo.
                 obstaculos.add(new Obstaculo(context,x * Tile.ancho + Tile.ancho/2,y * Tile.altura + Tile.altura));
                 return new TileNormal(null,Tile.PASABLE);
+            case 'F':
+                //Meta
+                return new TileMeta(CargadorGraficos.cargarDrawable(context, R.drawable.tile_meta), Tile.SOLIDO, this);
 
             default:
                 //cualquier otro caso
@@ -731,5 +754,7 @@ public class Nivel {
             }
         }
     }
+
+
 }
 

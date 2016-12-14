@@ -266,7 +266,7 @@ public class Jugador extends Modelo {
                 }
             }
             if (agachar) {
-                velocidadX = 2;
+                velocidadX = 4;
                 velocidadY += 2;
                 estadoAgachado = true;
             } else {

@@ -50,6 +50,7 @@ public class Obstaculo extends Modelo {
     public void reiniciar(){
         estado=NORMAL;
         sprite= sprites.get(NORMAL);
+        sprites.get(GOLPEADO).setFrameActual(0);
     }
 
 }
