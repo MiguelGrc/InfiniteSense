@@ -150,6 +150,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     protected void inicializar() throws Exception {
         inicializarGestorAudio(context);
         nivel = new Nivel(context, numeroNivel);
+        nivel.nivelPausado=true;
         botonGolpear = new BotonGolpear(context);
         botonSaltar = new BotonSaltar(context);
         botonAgachar= new BotonAgachar(context);
