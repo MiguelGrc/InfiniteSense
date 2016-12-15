@@ -121,7 +121,6 @@ public class Nivel {
              //   botonAgacharPulsado = false;
             //}
             if (botonGolpearPulsado) {
-                //TODO: Hay que comprobar colisiones contra que golpea
                 botonGolpearPulsado = false;
             }
                 actualizarIteraccionTiles();
@@ -444,7 +443,7 @@ public class Nivel {
     }
 
     /**
-     * Lo prepara todo cuando el jugador muere.
+     * Lo prepara tod.o cuando el jugador muere.
      */
     public void jugadorPerder(){
         scrollEjeX = 0;

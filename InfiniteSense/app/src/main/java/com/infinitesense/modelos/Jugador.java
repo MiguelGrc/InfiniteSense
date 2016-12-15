@@ -240,7 +240,6 @@ public class Jugador extends Modelo {
     private void agachado() {
         if (orientacion == IZQUIERDA){
             sprite= sprites.get(AGACHADO_IZQUIERDA);
-            //TODO: Cambiar las colisiones para que solo sea para la mitad del tile.
         }
         else {
             sprite= sprites.get(AGACHADO_IZQUIERDA);

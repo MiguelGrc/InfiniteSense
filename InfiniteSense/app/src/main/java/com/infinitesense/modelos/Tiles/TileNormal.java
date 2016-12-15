@@ -14,7 +14,7 @@ public class TileNormal extends Tile {
 
     @Override
     public void interactuar(Jugador jugador) {
-        //Resetea todo lo relacionado con mejoras.
+        //Resetea tod.o lo relacionado con mejoras.
         jugador.superSalto=false;
     }
 }
