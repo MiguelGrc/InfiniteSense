@@ -112,38 +112,50 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void procesarEventosTouch() {
         for (int i = 0; i < 6; i++) {
             if (accion[i] != NO_ACTION) {
+                if (accion[i] == ACTION_UP && pad.estaPulsado(x[i],y[i])) {
+                    nivel.botonAgacharPulsado = false;
+                }
+
+
                 if (accion[i] == ACTION_DOWN) {
+
+
                     if (nivel.nivelPausado) {
                         nivel.nivelPausado = false;
                         GestorAudio.getInstancia().reproducirMusicaAmbiente();
                         nivel.restaurarNivel();
                     }
-                }
-                if (botonGolpear.estaPulsado(x[i], y[i])) {
-                    if (accion[i] == ACTION_DOWN) {
-                        nivel.botonGolpearPulsado = true;
+
+                    if (botonGolpear.estaPulsado(x[i], y[i])) {
+                        if (accion[i] == ACTION_DOWN) {
+                            nivel.botonGolpearPulsado = true;
+                        }
+                    }
+                    if (botonSaltar.estaPulsado(x[i], y[i])) {
+                        if (accion[i] == ACTION_DOWN) {
+                            nivel.botonSaltarPulsado = true;
+                        }
+                    }
+                    if (pad.estaPulsado(x[i], y[i])) {
+                        nivel.botonGolpearPulsado = false;//En caso de que se bugue haciendo ambas.
+                        nivel.botonAgacharPulsado = true;
                     }
                 }
-                if (botonSaltar.estaPulsado(x[i], y[i])) {
-                    if (accion[i] == ACTION_DOWN) {
-                        nivel.botonSaltarPulsado = true;
-                    }
-                }
-                if (pad.estaPulsado(x[i], y[i])) {
-                    nivel.botonAgacharPulsado = true;
-                }
+
+
             }
         }
     }
 
     protected void inicializar() throws Exception {
+        inicializarGestorAudio(context);
         nivel = new Nivel(context, numeroNivel);
         botonGolpear = new BotonGolpear(context);
         botonSaltar = new BotonSaltar(context);
         botonAgachar= new BotonAgachar(context);
         pad = new Pad(context);
         nivel.gameview = this;
-        inicializarGestorAudio(context);
+
     }
 
     public void actualizar(long tiempo) throws Exception {
@@ -235,6 +247,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             nivel.botonAgacharPulsado = true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(nivel.jugador.estadoAgachado){
+            nivel.botonAgacharPulsado=false;
+        }
+        return super.onKeyDown(keyCode,event);
     }
 
 }

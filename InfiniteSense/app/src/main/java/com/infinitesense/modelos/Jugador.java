@@ -2,6 +2,7 @@ package com.infinitesense.modelos;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;

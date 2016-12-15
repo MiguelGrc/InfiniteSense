@@ -30,7 +30,7 @@ public class Nivel {
     private Context context = null;
     private int numeroNivel;
     private Fondo fondo;
-    private Jugador jugador;
+    public Jugador jugador;
 
     private Tile[][] mapaTiles;
 
@@ -105,9 +105,9 @@ public class Nivel {
             if (botonSaltarPulsado) {
                 botonSaltarPulsado = false;
             }
-            if (botonAgacharPulsado){
-                botonAgacharPulsado = false;
-            }
+            //if (botonAgacharPulsado){
+             //   botonAgacharPulsado = false;
+            //}
             if (botonGolpearPulsado) {
                 //TODO: Hay que comprobar colisiones contra que golpea
                 botonGolpearPulsado = false;
