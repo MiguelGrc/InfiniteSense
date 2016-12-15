@@ -644,11 +644,11 @@ public class Nivel {
                 return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_ground_abyss_right), Tile.SOLIDO);
             case 'w':
-                // bloque de musgo, no se puede pasar
+                // bloque de agua superficie, se puede pasar
                 return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_water_surface), Tile.PASABLE);
             case 'W':
-                // bloque de musgo, no se puede pasar
+                // bloque de agua, no se puede pasar
                 return new TileNormal(CargadorGraficos.cargarDrawable(context,
                         R.drawable.tile_water_pure), Tile.PASABLE);
             case 'M':
@@ -660,19 +660,19 @@ public class Nivel {
                 obstaculos.add(new Obstaculo(context,x * Tile.ancho + Tile.ancho/2,y * Tile.altura + Tile.altura));
                 return new TileNormal(null,Tile.PASABLE);
             case 'F':
-                //Meta
+                //Meta.
                 return new TileMeta(CargadorGraficos.cargarDrawable(context, R.drawable.tile_meta), Tile.SOLIDO, this);
             case '+':
-                // Powerup rápido
+                // Powerup rápido.
                 powerupsRapidos.add(new PowerupRapido(context,x * Tile.ancho + Tile.ancho/2,y * Tile.altura + Tile.altura));
                 return new TileNormal(null,Tile.PASABLE);
             case '-':
-                // Powerup lento
+                // Powerup lento.
                 powerupsLentos.add(new PowerupLento(context,x * Tile.ancho + Tile.ancho/2,y * Tile.altura + Tile.altura));
                 return new TileNormal(null,Tile.PASABLE);
 
             default:
-                //cualquier otro caso
+                //cualquier otro caso.
                 return new TileNormal(null, Tile.PASABLE);
         }
     }
