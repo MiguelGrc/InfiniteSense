@@ -542,14 +542,14 @@ public class Nivel {
         if (nivelPausado) {
             // la foto mide 480x320
             Rect orgigen = new Rect(0, 0,
-                    480, 320);
+                    560, 320);
 
             Paint efectoTransparente = new Paint();
             efectoTransparente.setAntiAlias(true);
 
-            Rect destino = new Rect((int) (GameView.pantallaAncho / 2 - 480 / 2),
+            Rect destino = new Rect((int) (GameView.pantallaAncho / 2 - 560 / 2),
                     (int) (GameView.pantallaAlto / 2 - 320 / 2),
-                    (int) (GameView.pantallaAncho / 2 + 480 / 2),
+                    (int) (GameView.pantallaAncho / 2 + 560 / 2),
                     (int) (GameView.pantallaAlto / 2 + 320 / 2));
             canvas.drawBitmap(mensaje, orgigen, destino, null);
         }
