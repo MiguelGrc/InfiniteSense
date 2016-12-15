@@ -16,10 +16,10 @@ public class BotonGolpear extends Modelo {
 
     public BotonGolpear(Context context) {
         super(context, GameView.pantallaAncho*0.85 , GameView.pantallaAlto*0.5,
-                70,70);
+                GameView.pantallaAlto, GameView.pantallaAncho);
 
-        altura = (int) (GameView.pantallaAlto*0.60);
-        ancho = (int) (GameView.pantallaAlto*0.15);
+        altura = 100;
+        ancho = 100;
 
         imagen = CargadorGraficos.cargarDrawable(context, R.drawable.buttonfire);
     }

@@ -15,11 +15,11 @@ import com.infinitesense.modelos.Modelo;
 public class BotonSaltar extends Modelo {
 
     public BotonSaltar(Context context) {
-        super(context, GameView.pantallaAncho*0.5 , GameView.pantallaAlto*0.15,
+        super(context, GameView.pantallaAncho*0.15 , GameView.pantallaAlto*0.15,
                 GameView.pantallaAlto, GameView.pantallaAncho);
 
-        altura = (int) (GameView.pantallaAlto*0.15);
-        ancho = (int) (GameView.pantallaAlto*0.75);
+        altura = 100;
+        ancho = 100;
         imagen = CargadorGraficos.cargarDrawable(context, R.drawable.buttonjump);
     }
 
