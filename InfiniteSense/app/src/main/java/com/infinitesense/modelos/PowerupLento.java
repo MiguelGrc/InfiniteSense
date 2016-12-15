@@ -29,13 +29,13 @@ public class PowerupLento extends Modelo {
         Sprite nuevo = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.animacion_rojo),
                 60, 60,
-                15, 2, true);
+                6, 2, true);
         sprites.put(NUEVO, nuevo);
 
         Sprite recogido = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.animacion_explosion_rojo),
                 60, 60,
-                15, 3, false);
+                6, 3, false);
         sprites.put(RECOGIDO, recogido);
 
         sprite = nuevo;

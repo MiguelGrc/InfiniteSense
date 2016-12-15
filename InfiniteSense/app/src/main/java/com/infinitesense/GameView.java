@@ -56,6 +56,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         gestorAudio.registrarSonido(GestorAudio.SONIDO_DESTRUIR, R.raw.concrete_break );
         gestorAudio.registrarSonido(GestorAudio.SONIDO_POWERUP_RAPIDO, R.raw.faster );
         gestorAudio.registrarSonido(GestorAudio.SONIDO_POWERUP_LENTO, R.raw.slower );
+        gestorAudio.registrarSonido(GestorAudio.SONIDO_META, R.raw.meta );
     }
 
 

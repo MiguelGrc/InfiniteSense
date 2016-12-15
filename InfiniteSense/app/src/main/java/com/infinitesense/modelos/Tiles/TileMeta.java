@@ -2,6 +2,7 @@ package com.infinitesense.modelos.Tiles;
 
 import android.graphics.drawable.Drawable;
 
+import com.infinitesense.gestores.GestorAudio;
 import com.infinitesense.modelos.Jugador;
 import com.infinitesense.modelos.Nivel;
 
@@ -11,6 +12,7 @@ import com.infinitesense.modelos.Nivel;
 public class TileMeta extends Tile {
 
     Nivel nivel;
+    private boolean pisado;
 
     public TileMeta(Drawable imagen, int tipoDeColision, Nivel nivel) {
         super(imagen, tipoDeColision);
@@ -19,7 +21,11 @@ public class TileMeta extends Tile {
 
     @Override
     public void interactuar(Jugador jugador) {
-        nivel.nivelPausado=true;
-        nivel.ganar();
+        if(!pisado) {
+            pisado = true;
+            nivel.nivelPausado = true;
+            nivel.ganar();
+            GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_META);
+        }
     }
 }

@@ -13,6 +13,7 @@ import com.infinitesense.gestores.CargadorGraficos;
 import com.infinitesense.gestores.GestorAudio;
 import com.infinitesense.gestores.Utilidades;
 import com.infinitesense.modelos.Tiles.Tile;
+import com.infinitesense.modelos.Tiles.TileAgua;
 import com.infinitesense.modelos.Tiles.TileMeta;
 import com.infinitesense.modelos.Tiles.TileNormal;
 import com.infinitesense.modelos.Tiles.TileNota;
@@ -85,17 +86,19 @@ public class Nivel {
      */
     public void inicializar() throws Exception {
         scrollEjeX = 0;
-        scrollEjeY = 0;
 
         obstaculos= new LinkedList<Obstaculo>();
         monedas= new LinkedList<Moneda>();
         powerupsRapidos= new LinkedList<PowerupRapido>();
         powerupsLentos= new LinkedList<PowerupLento>();
 
-
-        mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.description);
         fondo = new Fondo(context, CargadorGraficos.cargarDrawable(context, R.drawable.sunset_background));
         inicializarMapaTiles();
+
+        scrollEjeY = (int)jugador.y - GameView.pantallaAlto/2;
+
+        mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.description);
+
         contadorMonedas = new ContadorMonedas(context);
         contadorTiempo = new ContadorTiempo(context);
         contadorTiempoGanar = new ContadorTiempoGanar(context);
@@ -443,10 +446,10 @@ public class Nivel {
     /**
      * Lo prepara todo cuando el jugador muere.
      */
-    private void jugadorPerder(){
+    public void jugadorPerder(){
         scrollEjeX = 0;
-        scrollEjeY = 0;
         jugador.restablecerPosicionInicial();
+        scrollEjeY = (int)jugador.y - GameView.pantallaAlto/2;
         jugador.restablecerModificadorVelocidad();
         jugador.enElAire=false; //No funcionaba al morir antes.
         nivelPausado = true;
@@ -461,8 +464,8 @@ public class Nivel {
 
     public void restaurarNivel(){
         scrollEjeX = 0;
-        scrollEjeY = 0;
         jugador.restablecerPosicionInicial();
+        scrollEjeY = (int)jugador.y - GameView.pantallaAlto/2;
         jugador.restablecerModificadorVelocidad();
         jugador.enElAire=false; //No funcionaba al morir antes.
         contadorMonedas = new ContadorMonedas(context);
@@ -472,7 +475,7 @@ public class Nivel {
     }
 
     public void ganar() {
-
+        GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_META);
         nivelPausado=true;
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_win);
         contadorTiempoGanar.habilitar(contadorTiempo.tiempoEnMin);
@@ -649,8 +652,8 @@ public class Nivel {
                         R.drawable.tile_water_surface), Tile.PASABLE);
             case 'W':
                 // bloque de agua, no se puede pasar
-                return new TileNormal(CargadorGraficos.cargarDrawable(context,
-                        R.drawable.tile_water_pure), Tile.PASABLE);
+                return new TileAgua(CargadorGraficos.cargarDrawable(context,
+                        R.drawable.tile_water_pure), Tile.SOLIDO, this);
             case 'M':
                 //bloque de nota musica, para salto mejorado.
                 return new TileNota(CargadorGraficos.cargarDrawable(context,
@@ -688,15 +691,15 @@ public class Nivel {
         arriba = Math.max(0, arriba); // Que nunca sea < 0, ej -1
 
         if (jugador.y <
-                altoMapaTiles() * Tile.altura - GameView.pantallaAlto * 0.3)
-            if (jugador.y - scrollEjeY > GameView.pantallaAlto * 0.7) {
-                scrollEjeY += (int) ((jugador.y - scrollEjeY) - GameView.pantallaAlto * 0.7);
+                altoMapaTiles() * Tile.altura - GameView.pantallaAlto * 0.45)
+            if (jugador.y - scrollEjeY > GameView.pantallaAlto * 0.55) {
+                scrollEjeY += (int) ((jugador.y - scrollEjeY) - GameView.pantallaAlto * 0.55);
             }
 
 
-        if (jugador.y > GameView.pantallaAlto * 0.3)
-            if (jugador.y - scrollEjeY < GameView.pantallaAlto * 0.3) {
-                scrollEjeY -= (int) (GameView.pantallaAlto * 0.3 - (jugador.y - scrollEjeY));
+        if (jugador.y > GameView.pantallaAlto * 0.45)
+            if (jugador.y - scrollEjeY < GameView.pantallaAlto * 0.45) {
+                scrollEjeY -= (int) (GameView.pantallaAlto * 0.45 - (jugador.y - scrollEjeY));
             }
 
 
@@ -714,15 +717,13 @@ public class Nivel {
         izquierda = Math.max(0, izquierda); // Que nunca sea < 0, ej -1
 
 
-        if (jugador.x <
-                (anchoMapaTiles() - tilesEnDistanciaX(GameView.pantallaAncho * 0.3)) * Tile.ancho)
+        if (jugador.x < (anchoMapaTiles() - tilesEnDistanciaX(GameView.pantallaAncho * 0.3)) * Tile.ancho)
             if (jugador.x - scrollEjeX > GameView.pantallaAncho * 0.7) {
                 scrollEjeX += (int) ((jugador.x - scrollEjeX) - GameView.pantallaAncho * 0.7);
 
             }
 
-        if (jugador.x >
-                tilesEnDistanciaX(GameView.pantallaAncho * 0.3) * Tile.ancho)
+        if (jugador.x > tilesEnDistanciaX(GameView.pantallaAncho * 0.3) * Tile.ancho)
             if (jugador.x - scrollEjeX < GameView.pantallaAncho * 0.3) {
                 scrollEjeX -= (int) (GameView.pantallaAncho * 0.3 - (jugador.x - scrollEjeX));
             }
@@ -823,7 +824,7 @@ public class Nivel {
         }
 
         for(PowerupRapido pr: powerupsRapidos){
-            if(pr.colisiona(jugador) && pr.isRecogido()==false){ //Si la moneda no está recogida
+            if(pr.colisiona(jugador) && pr.isRecogido()==false){
                 pr.recoger();
                 jugador.modificadorVelocidad++;
                 GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_POWERUP_RAPIDO);
@@ -831,7 +832,7 @@ public class Nivel {
         }
 
         for(PowerupLento pl: powerupsLentos){
-            if(pl.colisiona(jugador) && pl.isRecogido()==false){ //Si la moneda no está recogida
+            if(pl.colisiona(jugador) && pl.isRecogido()==false){
                 pl.recoger();
                 jugador.modificadorVelocidad--;
                 GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_POWERUP_LENTO);

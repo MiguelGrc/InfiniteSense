@@ -18,6 +18,7 @@ public class GestorAudio implements MediaPlayer.OnPreparedListener {
     public static final int SONIDO_DESTRUIR = 4;
     public static final int SONIDO_POWERUP_RAPIDO = 5;
     public static final int SONIDO_POWERUP_LENTO = 6;
+    public static final int SONIDO_META = 7;
     // Pool de sonidos, para efectos de sonido.
     // Suele fallar el utilizar ficheros de sonido demasiado grandes
     private SoundPool poolSonidos;
