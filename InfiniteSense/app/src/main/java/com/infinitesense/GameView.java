@@ -10,10 +10,9 @@ import android.view.SurfaceView;
 
 import com.infinitesense.gestores.GestorAudio;
 import com.infinitesense.modelos.Nivel;
-import com.infinitesense.modelos.controles.BotonAgachar;
 import com.infinitesense.modelos.controles.BotonGolpear;
 import com.infinitesense.modelos.controles.BotonSaltar;
-import com.infinitesense.modelos.controles.Pad;
+import com.infinitesense.modelos.controles.BotonAgachar;
 
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
@@ -29,8 +28,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public int numeroNivel = 0;
     private BotonGolpear botonGolpear;
     private BotonSaltar botonSaltar;
-    private BotonAgachar botonAgachar;
-    private Pad pad;
+    private BotonAgachar pad;
 
     private GestorAudio gestorAudio;
 
@@ -151,10 +149,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         inicializarGestorAudio(context);
         nivel = new Nivel(context, numeroNivel);
         nivel.nivelPausado=true;
+        gestorAudio.pararMusicaAmbiente();
         botonGolpear = new BotonGolpear(context);
         botonSaltar = new BotonSaltar(context);
-        botonAgachar= new BotonAgachar(context);
-        pad = new Pad(context);
+        pad = new BotonAgachar(context);
         nivel.gameview = this;
 
     }
