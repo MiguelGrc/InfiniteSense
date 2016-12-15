@@ -34,6 +34,9 @@ public class Jugador extends Modelo {
     public static final String AGACHADO_IZQUIERDA = "agachado_izquierda";
     public static final String AGACHADO_DERECHA = "agachado_derecha";
 
+    public static final int VELOCIDAD_BASE = 6;
+    public static final int VELOCIDAD_AGACHADO = 5;
+
     public boolean estadoGolpeando;
     public boolean superSalto;
 
@@ -56,6 +59,8 @@ public class Jugador extends Modelo {
     public boolean golpeado = false;
     public boolean estadoAgachado;
 
+    public int modificadorVelocidad = 0;
+
     public Jugador(Context context, double xInicial, double yInicial) {
         super(context, 0, 0, 40, 40);
 
@@ -74,6 +79,10 @@ public class Jugador extends Modelo {
         cAbajo = altura/2;
 
         inicializar();
+    }
+
+    public void restablecerModificadorVelocidad(){
+        modificadorVelocidad = 0;
     }
 
     public void inicializar() {
@@ -127,7 +136,7 @@ public class Jugador extends Modelo {
                 8, 4, false);
         sprites.put(GOLPEANDO_IZQUIERDA, golpeandoIzquierda);
 
-        //Agachado TODO: Cambiar los sprites por los de agachado
+        //Agachado
 
         Sprite agachadoDerecha = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.slide_ninja),
@@ -267,14 +276,15 @@ public class Jugador extends Modelo {
                 }
             }
             if (agachar) {
-                velocidadX = 4;
-                velocidadY += 2;
+                velocidadX = VELOCIDAD_AGACHADO + modificadorVelocidad;
+                velocidadY += 2 + modificadorVelocidad;
                 estadoAgachado = true;
             } else {
 
                 //resetearDimensiones();
-                velocidadX = 5;
+                velocidadX = VELOCIDAD_BASE + modificadorVelocidad;
                 estadoAgachado = false;
+
             }
             if (golpear) {
                 estadoGolpeando = true;
@@ -282,6 +292,14 @@ public class Jugador extends Modelo {
                 sprites.get(GOLPEANDO_DERECHA).setFrameActual(0);
                 sprites.get(GOLPEANDO_IZQUIERDA).setFrameActual(0);
             }
+
+            if(velocidadX < 4){
+                velocidadX = 4;
+            }
+            else if(velocidadX > 10){
+                velocidadX = 10;
+            }
+
         } else {
             sprite = sprites.get(PARADO_DERECHA);
             velocidadX = 0;

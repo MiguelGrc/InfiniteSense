@@ -17,6 +17,7 @@ import com.infinitesense.modelos.Tiles.TileMeta;
 import com.infinitesense.modelos.Tiles.TileNormal;
 import com.infinitesense.modelos.Tiles.TileNota;
 import com.infinitesense.modelos.controles.ContadorMonedas;
+import com.infinitesense.modelos.controles.ContadorMonedasGanar;
 import com.infinitesense.modelos.controles.ContadorTiempo;
 import com.infinitesense.modelos.controles.ContadorTiempoGanar;
 
@@ -54,10 +55,15 @@ public class Nivel {
 
     public LinkedList<Obstaculo> obstaculos;
     public LinkedList<Moneda> monedas;
+    public LinkedList<PowerupRapido> powerupsRapidos;
+    public LinkedList<PowerupLento> powerupsLentos;
 
     private ContadorMonedas contadorMonedas;
     private ContadorTiempo contadorTiempo;
     private ContadorTiempoGanar contadorTiempoGanar;
+    private ContadorMonedasGanar contadorMonedasGanar;
+
+    public boolean nivelCompleto;
 
     public Nivel(Context context, int numeroNivel) throws Exception {
         inicializado = false;
@@ -83,6 +89,8 @@ public class Nivel {
 
         obstaculos= new LinkedList<Obstaculo>();
         monedas= new LinkedList<Moneda>();
+        powerupsRapidos= new LinkedList<PowerupRapido>();
+        powerupsLentos= new LinkedList<PowerupLento>();
 
 
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.description);
@@ -91,6 +99,7 @@ public class Nivel {
         contadorMonedas = new ContadorMonedas(context);
         contadorTiempo = new ContadorTiempo(context);
         contadorTiempoGanar = new ContadorTiempoGanar(context);
+        contadorMonedasGanar = new ContadorMonedasGanar(context);
     }
 
     /**
@@ -140,6 +149,26 @@ public class Nivel {
             }
         }
         if(monedaADestruir != null){
+            //
+        }
+
+        PowerupRapido powerupRapidoADestruir = null;
+        for(PowerupRapido pr : powerupsRapidos){
+            if(pr.actualizar(tiempo)){
+                powerupRapidoADestruir = pr;
+            }
+        }
+        if(powerupRapidoADestruir != null){
+            //
+        }
+
+        PowerupLento powerupLentoADestruir = null;
+        for(PowerupLento pl : powerupsLentos){
+            if(pl.actualizar(tiempo)){
+                powerupLentoADestruir = pl;
+            }
+        }
+        if(powerupLentoADestruir != null){
             //
         }
 
@@ -418,6 +447,7 @@ public class Nivel {
         scrollEjeX = 0;
         scrollEjeY = 0;
         jugador.restablecerPosicionInicial();
+        jugador.restablecerModificadorVelocidad();
         jugador.enElAire=false; //No funcionaba al morir antes.
         nivelPausado = true;
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
@@ -433,6 +463,7 @@ public class Nivel {
         scrollEjeX = 0;
         scrollEjeY = 0;
         jugador.restablecerPosicionInicial();
+        jugador.restablecerModificadorVelocidad();
         jugador.enElAire=false; //No funcionaba al morir antes.
         contadorMonedas = new ContadorMonedas(context);
         contadorTiempo = new ContadorTiempo(context);
@@ -445,6 +476,17 @@ public class Nivel {
         nivelPausado=true;
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_win);
         contadorTiempoGanar.habilitar(contadorTiempo.tiempoEnMin);
+        contadorMonedasGanar.habilitar(contadorMonedas.getPuntos());
+        nivelCompleto = true;
+    }
+
+    public void cambiarNivel() {
+        nivelCompleto = false;
+        try {
+            gameview.nivelCompleto();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -459,6 +501,14 @@ public class Nivel {
             mo.reiniciar();
         }
 
+        for(PowerupRapido pr: powerupsRapidos){
+            pr.reiniciar();
+        }
+
+        for(PowerupLento pl: powerupsLentos){
+            pl.reiniciar();
+        }
+
     }
 
 
@@ -471,6 +521,7 @@ public class Nivel {
         contadorMonedas.dibujar(canvas);
         contadorTiempo.dibujar(canvas);
         contadorTiempoGanar.dibujar(canvas);
+        contadorMonedasGanar.dibujar(canvas);
 
         for(Obstaculo obs: obstaculos){
             obs.dibujar(canvas);
@@ -478,6 +529,14 @@ public class Nivel {
 
         for(Moneda mo: monedas){
             mo.dibujar(canvas);
+        }
+
+        for(PowerupRapido pr: powerupsRapidos){
+            pr.dibujar(canvas);
+        }
+
+        for(PowerupLento pl: powerupsLentos){
+            pl.dibujar(canvas);
         }
 
         if (nivelPausado) {
@@ -496,6 +555,7 @@ public class Nivel {
         }
         if(!nivelPausado){
             contadorTiempoGanar.deshabilitar();
+            contadorMonedasGanar.deshabilitar();
         }
 
 
@@ -602,6 +662,14 @@ public class Nivel {
             case 'F':
                 //Meta
                 return new TileMeta(CargadorGraficos.cargarDrawable(context, R.drawable.tile_meta), Tile.SOLIDO, this);
+            case '+':
+                // Powerup rápido
+                powerupsRapidos.add(new PowerupRapido(context,x * Tile.ancho + Tile.ancho/2,y * Tile.altura + Tile.altura));
+                return new TileNormal(null,Tile.PASABLE);
+            case '-':
+                // Powerup lento
+                powerupsLentos.add(new PowerupLento(context,x * Tile.ancho + Tile.ancho/2,y * Tile.altura + Tile.altura));
+                return new TileNormal(null,Tile.PASABLE);
 
             default:
                 //cualquier otro caso
@@ -753,6 +821,23 @@ public class Nivel {
                 GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_MONEDA);
             }
         }
+
+        for(PowerupRapido pr: powerupsRapidos){
+            if(pr.colisiona(jugador) && pr.isRecogido()==false){ //Si la moneda no está recogida
+                pr.recoger();
+                jugador.modificadorVelocidad++;
+                GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_POWERUP_RAPIDO);
+            }
+        }
+
+        for(PowerupLento pl: powerupsLentos){
+            if(pl.colisiona(jugador) && pl.isRecogido()==false){ //Si la moneda no está recogida
+                pl.recoger();
+                jugador.modificadorVelocidad--;
+                GestorAudio.getInstancia().reproducirSonido(GestorAudio.SONIDO_POWERUP_LENTO);
+            }
+        }
+
     }
 
 

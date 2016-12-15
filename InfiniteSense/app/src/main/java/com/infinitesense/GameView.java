@@ -54,6 +54,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         gestorAudio.registrarSonido(GestorAudio.SONIDO_MUERTE, R.raw.die_sound );
         gestorAudio.registrarSonido(GestorAudio.SONIDO_MONEDA, R.raw.coin_sound );
         gestorAudio.registrarSonido(GestorAudio.SONIDO_DESTRUIR, R.raw.concrete_break );
+        gestorAudio.registrarSonido(GestorAudio.SONIDO_POWERUP_RAPIDO, R.raw.faster );
+        gestorAudio.registrarSonido(GestorAudio.SONIDO_POWERUP_LENTO, R.raw.slower );
     }
 
 
@@ -117,8 +119,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
                 if (accion[i] == ACTION_DOWN) {
 
-
-                    if (nivel.nivelPausado) {
+                    if(nivel.nivelCompleto){
+                        nivel.cambiarNivel();
+                    }
+                    else if (nivel.nivelPausado) {
                         nivel.nivelPausado = false;
                         GestorAudio.getInstancia().reproducirMusicaAmbiente();
                         nivel.restaurarNivel();

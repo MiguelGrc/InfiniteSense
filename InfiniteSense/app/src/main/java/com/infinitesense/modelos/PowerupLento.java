@@ -2,20 +2,18 @@ package com.infinitesense.modelos;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.Log;
 
 import com.infinitesense.R;
 import com.infinitesense.gestores.CargadorGraficos;
 import com.infinitesense.graficos.Sprite;
-import com.infinitesense.modelos.Tiles.Tile;
 
 import java.util.HashMap;
 
 /**
- * Created by MIGUEL on 05/12/2016.
+ * Created by MIGUEL on 15/12/2016.
  */
 
-public class Moneda extends Modelo {
+public class PowerupLento extends Modelo {
 
     private Sprite sprite;
     private HashMap<String,Sprite> sprites = new HashMap<String,Sprite> ();
@@ -25,19 +23,19 @@ public class Moneda extends Modelo {
     public static final String NUEVO = "Nuevo";
     public static final String RECOGIDO = "Recogido";
 
-    public Moneda(Context context, double x, double y) {
+    public PowerupLento(Context context, double x, double y) {
         super(context, x, y, 40, 40);
 
         Sprite nuevo = new Sprite(
-                CargadorGraficos.cargarDrawable(context, R.drawable.animacion_recolectable),
-                40, 40,
-                15, 8, true);
+                CargadorGraficos.cargarDrawable(context, R.drawable.animacion_rojo),
+                60, 60,
+                15, 2, true);
         sprites.put(NUEVO, nuevo);
 
         Sprite recogido = new Sprite(
-                CargadorGraficos.cargarDrawable(context, R.drawable.animacion_disparo1),
-                40, 32,
-                15, 4, false);
+                CargadorGraficos.cargarDrawable(context, R.drawable.animacion_explosion_rojo),
+                60, 60,
+                15, 3, false);
         sprites.put(RECOGIDO, recogido);
 
         sprite = nuevo;
@@ -52,14 +50,6 @@ public class Moneda extends Modelo {
         return sprite.actualizar(tiempo);
     }
 
-//    @Override
-//    public void actualizar(long tiempo){
-//        sprite.actualizar(tiempo);
-//        if (recogido)
-//            sprite = sprites.get(RECOGIDO);
-//        else
-//            sprite = sprites.get(NUEVO);
-//    }
 
     public void recoger(){
         recogido = true;
@@ -74,24 +64,9 @@ public class Moneda extends Modelo {
         this.recogido = recogido;
     }
 
-//    //From ships game
-//    public boolean colisiona(Jugador jugador, int x, int y){
-//        boolean colisiona = false;
-//
-//        if ((jugador.x < (x + 1) * ancho)
-//                && (jugador.x > x * ancho)
-//                && (y * altura < jugador.y)
-//                && ((y + 1) * altura > jugador.y)) {
-//            colisiona = true;
-//        }
-//
-//        return colisiona;
-//    }
-
     public void reiniciar(){
         recogido = false;
         sprite= sprites.get(NUEVO);
         sprites.get(RECOGIDO).setFrameActual(0);
     }
-
 }

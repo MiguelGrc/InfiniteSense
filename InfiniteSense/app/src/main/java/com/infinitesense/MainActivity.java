@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 
         gameView = new GameView(this);
         setContentView(gameView);
-        gameView.numeroNivel = 1;
+        gameView.numeroNivel = 0;
         gameView.requestFocus();
     }
 
