@@ -14,12 +14,11 @@ import com.infinitesense.modelos.Modelo;
 public class BotonAgachar extends Modelo {
 
     public BotonAgachar(Context context) {
-        super(context, GameView.pantallaAncho*0.15 , GameView.pantallaAlto*0.8 ,
+        super(context, GameView.pantallaAncho*0.28 , GameView.pantallaAlto*0.75 ,
                 GameView.pantallaAlto, GameView.pantallaAncho);
 
-        altura = 100;
-        ancho = 100;
-        imagen = CargadorGraficos.cargarDrawable(context, R.drawable.pad);
+        altura = 125;
+        ancho = 250;
     }
 
     public boolean estaPulsado(float clickX, float clickY) {

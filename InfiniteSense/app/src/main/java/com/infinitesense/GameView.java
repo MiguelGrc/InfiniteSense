@@ -167,10 +167,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     protected void dibujar(Canvas canvas) {
         nivel.dibujar(canvas);
-        //No es necesario dibujarlas ya que solo contamos áreas de pantalla, no botones.
-        botonGolpear.dibujar(canvas);
-        botonSaltar.dibujar(canvas);
-        pad.dibujar(canvas);
     }
 
     /**

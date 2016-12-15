@@ -15,13 +15,11 @@ import com.infinitesense.modelos.Modelo;
 public class BotonGolpear extends Modelo {
 
     public BotonGolpear(Context context) {
-        super(context, GameView.pantallaAncho*0.85 , GameView.pantallaAlto*0.5,
-                70,70);
+        super(context, GameView.pantallaAncho*0.80 , GameView.pantallaAlto*0.55,
+                GameView.pantallaAlto, GameView.pantallaAncho);
 
-        altura = (int) (GameView.pantallaAlto*0.60);
-        ancho = (int) (GameView.pantallaAlto*0.15);
-
-        imagen = CargadorGraficos.cargarDrawable(context, R.drawable.buttonfire);
+        altura = 125;
+        ancho = 220;
     }
 
     public boolean estaPulsado(float clickX, float clickY) {
