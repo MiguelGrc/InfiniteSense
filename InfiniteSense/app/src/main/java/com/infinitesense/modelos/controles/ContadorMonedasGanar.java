@@ -8,19 +8,18 @@ import android.graphics.Paint;
 import com.infinitesense.GameView;
 
 /**
- * Created by Jorge on 14/12/2016.
+ * Created by MIGUEL on 15/12/2016.
  */
-public class ContadorTiempoGanar extends ContadorTiempo {
 
-    private String tiempoTotal;
+public class ContadorMonedasGanar extends ContadorMonedas {
+
+    private int puntosTotal;
     private boolean habilitado;
 
-    public ContadorTiempoGanar(Context context) {
+    public ContadorMonedasGanar(Context context) {
         super(context);
-        x = GameView.pantallaAncho * 0.55;
+        x = GameView.pantallaAncho * 0.35;
         y = GameView.pantallaAlto * 0.5;
-
-
     }
 
     @Override
@@ -31,17 +30,18 @@ public class ContadorTiempoGanar extends ContadorTiempo {
             paint.setColor(Color.WHITE);
             paint.setAntiAlias(true);
             paint.setTextSize(50);
-            imagen.setBounds((int)x-30, (int)y-30, (int)x+10, (int)y+10);
+            imagen.setBounds((int)x-40, (int)y-40, (int)x+20, (int)y+20);
             imagen.draw(canvas);
-            canvas.drawText(tiempoTotal, (int) x + 20, (int) y + 7, paint);
+            canvas.drawText(String.valueOf(puntosTotal), (int) x + 20, (int) y + 7, paint);
         }
     }
 
-    public void habilitar(String tiempoTotal){
+    public void habilitar(int puntosTotal){
         habilitado=true;
-        this.tiempoTotal=tiempoTotal;
+        this.puntosTotal=puntosTotal;
     }
     public void deshabilitar(){
         habilitado=false;
     }
+
 }

@@ -43,7 +43,7 @@ public class ContadorTiempo extends Modelo {
         paint.setColor(Color.WHITE);
         paint.setAntiAlias(true);
         paint.setTextSize(20);
-        imagen.setBounds((int)x-10, (int)y-10, (int)x+10, (int)y+10);
+        imagen.setBounds((int)x-12, (int)y-12, (int)x+12, (int)y+12);
         imagen.draw(canvas);
         canvas.drawText(tiempoEnMin, (int)x+20, (int)y+7, paint);
     }
