@@ -33,7 +33,7 @@ public class ContadorMonedas extends Modelo{
         paint.setColor(Color.WHITE);
         paint.setAntiAlias(true);
         paint.setTextSize(20);
-        imagen.setBounds((int)x-10, (int)y-10, (int)x+10, (int)y+10);
+        imagen.setBounds((int)x-15, (int)y-15, (int)x+15, (int)y+15);
         imagen.draw(canvas);
         canvas.drawText(String.valueOf(puntos), (int)x+20, (int)y+7, paint);
     }
